@@ -199,3 +199,28 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
   .slide, .slide .bg, .division img { transition: none; }
   html { scroll-behavior: auto; }
 }
+
+/* ===== Precious metals ticker ===== */
+.ticker { background: var(--dark); color: #e9e6df; border-bottom: 1px solid var(--dark-2); }
+.ticker[hidden] { display: none; }
+.ticker-bar { width: min(var(--max), 100% - 40px); margin-inline: auto; display: flex; align-items: center; gap: 20px; min-height: 56px; }
+.ticker-label { font-family: var(--font-head); text-transform: uppercase; letter-spacing: .16em; font-size: .7rem; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.ticker-viewport { flex: 1; overflow: hidden; outline-offset: 2px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.ticker-track { display: flex; width: max-content; animation: ticker-scroll var(--ticker-dur, 40s) linear infinite; }
+.ticker-viewport:hover .ticker-track, .ticker-viewport:focus-within .ticker-track, .ticker-viewport:focus .ticker-track { animation-play-state: paused; }
+.tick { display: flex; align-items: baseline; gap: 10px; padding: 0 28px; white-space: nowrap; font-size: .9rem; border-right: 1px solid var(--dark-2); }
+.tick-name { font-family: var(--font-head); font-weight: 600; color: #fff; }
+.tick-price { font-variant-numeric: tabular-nums; }
+.tick-chg { font-variant-numeric: tabular-nums; font-size: .8rem; }
+.tick-chg.up { color: #6fcf97; }
+.tick-chg.down { color: #eb8a8a; }
+.ticker-meta { font-size: .72rem; color: #9aa1a8; white-space: nowrap; }
+@keyframes ticker-scroll { to { transform: translateX(-50%); } }
+@media (max-width: 720px) { .ticker-label, .ticker-meta { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .ticker-viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+  .ticker-track { animation: none; }
+  .ticker-track [aria-hidden="true"] { display: none; }
+}
