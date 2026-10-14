@@ -1,7 +1,7 @@
 // Precious metals ticker. Reads assets/prices.json (refreshed on a schedule);
-// hides itself if the file is missing, malformed or older than MAX_AGE_H.
+// hides itself if the file is missing, malformed or older than MAX_AGE_H hours.
 (function () {
-  var MAX_AGE_H = 48;
+  var MAX_AGE_H = 96; // covers a weekend gap
   var section = document.getElementById('metals-ticker');
   var track = document.getElementById('ticker-track');
   var meta = document.getElementById('ticker-meta');
