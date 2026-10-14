@@ -59,7 +59,7 @@ p { margin: 0 0 1.1em; }
 .btn { display: inline-block; font-family: var(--font-head); font-weight: 600; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; padding: 14px 26px; background: var(--accent); color: #fff; border: 2px solid var(--accent); transition: background .2s, color .2s; }
 .btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
 .btn.ghost { background: transparent; color: inherit; border-color: currentColor; }
-.btn.ghost:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .section.dark .btn.ghost:hover, .hero .btn.ghost:hover { background: #fff; color: var(--ink); border-color: #fff; }
 
 /* ===== Home hero slider ===== */
@@ -225,3 +225,26 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
   .ticker-track [aria-hidden="true"] { display: none; }
 }
 .tick-zar { font-variant-numeric: tabular-nums; font-size: .8rem; color: #b9b3a6; }
+
+/* ===== Dark mode ===== */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #ece9e2;
+  --ink-soft: #c4c0b7;
+  --muted: #9aa0a7;
+  --paper: #111417;
+  --paper-alt: #181c20;
+  --dark: #0a0c0e;
+  --line: #2b3036;
+  --accent-dark: #d6aa5a;
+}
+:root[data-theme="dark"] .logo img { background: #fff; padding: 4px 8px; border-radius: 6px; height: 46px; box-sizing: content-box; }
+:root[data-theme="dark"] .section.dark .btn.ghost:hover, :root[data-theme="dark"] .hero .btn.ghost:hover { color: #111417; }
+
+.logo { margin-right: auto; }
+.theme-toggle { display: inline-grid; place-items: center; width: 40px; height: 40px; margin-left: 8px; background: none; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); cursor: pointer; }
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.theme-toggle .i-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+.menu-btn { margin-left: 8px; }
