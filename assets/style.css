@@ -224,3 +224,4 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
   .ticker-track { animation: none; }
   .ticker-track [aria-hidden="true"] { display: none; }
 }
+.tick-zar { font-variant-numeric: tabular-nums; font-size: .8rem; color: #b9b3a6; }
