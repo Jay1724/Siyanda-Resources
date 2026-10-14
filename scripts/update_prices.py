@@ -21,6 +21,19 @@ def fetch(key):
         return json.load(r)
 
 
+def zar_per_usd(resp):
+    """Rand per 1 USD from the response's currency table, or None if unavailable.
+
+    metals.dev may quote rates either as USD per unit of currency (~0.055 for ZAR)
+    or units per USD (~18); the plausible range for ZAR tells us which.
+    """
+    r = (resp.get("currencies") or {}).get("ZAR")
+    if not isinstance(r, (int, float)) or r <= 0:
+        return None
+    rate = 1 / r if r < 1 else r
+    return round(rate, 4) if 5 <= rate <= 60 else None
+
+
 def build(resp, previous, now):
     if resp.get("status") != "success":
         raise ValueError("API status: %r" % resp.get("status"))
@@ -38,7 +51,7 @@ def build(resp, previous, now):
         items.append({"name": name, "price": round(v, 2), "change_pct": round((v - ref) / ref * 100, 2)})
     if not items:
         raise ValueError("no usable metal prices in response")
-    return {"updated": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "currency": "USD", "unit": "toz",
+    return {"updated": now.strftime("%Y-%m-%dT%H:%M:%SZ"), "currency": "USD", "unit": "toz", "usd_zar": zar_per_usd(resp),
             "items": items, "baseline": {"date": today, "prices": new_base}}
 
 
