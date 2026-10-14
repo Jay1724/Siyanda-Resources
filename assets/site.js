@@ -11,6 +11,24 @@
     });
   }
 
+  // Dark mode toggle (initial theme is set by the inline script in <head>)
+  var tt = document.querySelector('.theme-toggle');
+  if (tt) {
+    var root = document.documentElement;
+    var sync = function () {
+      var dark = root.getAttribute('data-theme') === 'dark';
+      tt.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      tt.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    };
+    sync();
+    tt.addEventListener('click', function () {
+      var dark = root.getAttribute('data-theme') !== 'dark';
+      if (dark) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
+      try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+      sync();
+    });
+  }
+
   // Hero slider — each new slide replays its own text motion
   var slides = document.querySelectorAll('.slide');
   var dots = document.querySelectorAll('.dot');
