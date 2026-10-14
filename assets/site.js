@@ -34,7 +34,35 @@
   var dots = document.querySelectorAll('.dot');
   if (slides.length > 1) {
     var i = 0, timer;
+    // Click-to-play YouTube on slides with data-video (iframe only loads on click)
+    var playing = false;
+    var stopVideo = function () {
+      var v = document.querySelector('.slide .video');
+      if (v) v.remove();
+      document.querySelectorAll('.slide.playing').forEach(function (sl) { sl.classList.remove('playing'); });
+      playing = false;
+    };
+    document.querySelectorAll('.slide .play').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var slide = b.closest('.slide');
+        var box = document.createElement('div');
+        box.className = 'video';
+        var f = document.createElement('iframe');
+        f.src = 'https://www.youtube-nocookie.com/embed/' + slide.getAttribute('data-video') + '?autoplay=1&rel=0&playsinline=1';
+        f.title = 'Siyanda Resources video';
+        f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        f.setAttribute('allowfullscreen', '');
+        var x = document.createElement('button');
+        x.className = 'video-close'; x.type = 'button'; x.setAttribute('aria-label', 'Close video'); x.textContent = '\u00D7';
+        x.addEventListener('click', stopVideo);
+        box.appendChild(f); box.appendChild(x);
+        slide.appendChild(box);
+        slide.classList.add('playing');
+        playing = true;
+      });
+    });
     var show = function (n) {
+      stopVideo();
       slides[i].classList.remove('active'); dots[i].classList.remove('active');
       i = (n + slides.length) % slides.length;
       slides[i].classList.add('active'); dots[i].classList.add('active');
@@ -42,7 +70,7 @@
     };
     var start = function () {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      timer = setInterval(function () { show(i + 1); }, 7000);
+      timer = setInterval(function () { if (!playing) show(i + 1); }, 7000);
     };
     dots.forEach(function (d, n) {
       d.addEventListener('click', function () { clearInterval(timer); if (n !== i) show(n); start(); });
