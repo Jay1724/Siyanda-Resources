@@ -1,0 +1,28 @@
+/* Motion kit styles. All classes namespaced .m-* */
+
+/* Hide until the effect has been created (prevents a flash of the final state).
+   The inline <head> script removes .m-js if GSAP fails to load, so nothing stays hidden. */
+html.m-js:not(.m-ready) main { visibility: hidden; }
+html.m-js [data-motion]:not(.m-on) { visibility: hidden; }
+
+/* Split text */
+.m-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.m-vis { display: block; }
+.m-w { display: inline-block; }
+.m-line { display: block; overflow: hidden; padding: .06em 0 .16em; margin: -.06em 0 -.16em; }
+.m-line-in { display: block; will-change: transform; }
+
+/* Marquee (partner logos) */
+.m-marquee { overflow: hidden; margin-top: 36px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+.m-track { display: flex; width: max-content; }
+.m-track .lg { flex: none; width: 200px; margin-right: 16px; background: #fff; border: 1px solid var(--line); aspect-ratio: 16/9; display: grid; place-items: center; padding: 14px; }
+.m-track .lg img { max-height: 100%; width: auto; object-fit: contain; }
+
+.stat .n { font-variant-numeric: tabular-nums; }
+
+@media (prefers-reduced-motion: reduce) {
+  html.m-js:not(.m-ready) main { visibility: visible; }
+  .m-marquee { -webkit-mask-image: none; mask-image: none; }
+  .m-track { flex-wrap: wrap; width: auto; gap: 16px; }
+  .m-track .lg { margin-right: 0; }
+}
