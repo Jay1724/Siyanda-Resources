@@ -252,3 +252,9 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 /* ===== Embedded video ===== */
 .video-embed { position: relative; aspect-ratio: 16 / 9; background: #000; }
 .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* ===== Home: larger video, centred Focus Areas intro ===== */
+.split.video-split { grid-template-columns: 5fr 7fr; }
+@media (max-width: 860px) { .split.video-split { grid-template-columns: 1fr; } }
+.focus > h2, .focus > .lead { text-align: center; }
+.focus > .lead { max-width: 64ch; margin-inline: auto; }
