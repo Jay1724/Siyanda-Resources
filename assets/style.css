@@ -9,6 +9,7 @@
   --dark-2: #1d2226;
   --accent: #b8893a;
   --accent-dark: #946c27;
+  --highlight: #ffd10f;
   --line: #e3e0d9;
   --font-head: "Montserrat", "Helvetica Neue", Arial, sans-serif;
   --font-body: "Inter", "Helvetica Neue", Arial, sans-serif;
@@ -305,3 +306,6 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 .partner-grid .lg { min-width: 0; overflow: hidden; }
 .partner-grid .lg img { max-width: 100%; }
 .invest-grid .invest { width: calc(25% - 15px); min-width: 230px; }
+
+/* ===== Heading highlights ===== */
+.hl { color: var(--highlight); }

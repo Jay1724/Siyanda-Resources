@@ -75,24 +75,37 @@
   /* ---- Text split: lines (masked). Text only; screen readers get a hidden copy. ---- */
   M.split = function (el) {
     var orig = el.innerHTML, txt = el.textContent.replace(/\s+/g, ' ').trim();
+    // words in document order, remembering which sit inside a .hl highlight
+    var toks = [];
+    (function walk(node, hl) {
+      Array.prototype.forEach.call(node.childNodes, function (c) {
+        if (c.nodeType === 3) c.nodeValue.split(/\s+/).forEach(function (w) { if (w) toks.push({ w: w, hl: hl }); });
+        else if (c.nodeType === 1) walk(c, hl || c.classList.contains('hl'));
+      });
+    })(el, false);
     el.innerHTML = '';
     var sr = document.createElement('span'); sr.className = 'm-sr'; sr.textContent = txt;
     var vis = document.createElement('span'); vis.className = 'm-vis'; vis.setAttribute('aria-hidden', 'true');
-    var words = txt.split(' ').map(function (w) {
-      var s = document.createElement('span'); s.className = 'm-w'; s.textContent = w;
+    var words = toks.map(function (t) {
+      var s = document.createElement('span'); s.className = 'm-w'; s.textContent = t.w;
       vis.appendChild(s); vis.appendChild(document.createTextNode(' ')); return s;
     });
     el.appendChild(sr); el.appendChild(vis);
     var lines = [], top = null, cur = null;
-    words.forEach(function (w) {
+    words.forEach(function (w, n) {
       var t = w.offsetTop;
       if (top === null || Math.abs(t - top) > 4) { cur = []; lines.push(cur); top = t; }
-      cur.push(w.textContent);
+      cur.push(toks[n]);
     });
     vis.innerHTML = '';
     var inners = lines.map(function (ws) {
       var l = document.createElement('span'); l.className = 'm-line';
-      var i = document.createElement('span'); i.className = 'm-line-in'; i.textContent = ws.join(' ');
+      var i = document.createElement('span'); i.className = 'm-line-in';
+      ws.forEach(function (t, k) {
+        if (k) i.appendChild(document.createTextNode(' '));
+        if (t.hl) { var h = document.createElement('span'); h.className = 'hl'; h.textContent = t.w; i.appendChild(h); }
+        else i.appendChild(document.createTextNode(t.w));
+      });
       l.appendChild(i); vis.appendChild(l); return i;
     });
     return { lines: inners, revert: function () { el.innerHTML = orig; } };
