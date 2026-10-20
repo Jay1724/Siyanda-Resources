@@ -358,3 +358,4 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 .doc-ext { margin-left: 10px; padding: 2px 7px; font-size: .62rem; vertical-align: middle; }
 
 #vacancies-section { scroll-margin-top: calc(var(--header-h) + 12px); }
+.article-docs { margin: 28px 0 8px; }

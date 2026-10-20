@@ -120,6 +120,7 @@
         { k: 'title', l: 'Document title', t: 'text', req: true },
         { k: 'category', l: 'Category', t: 'text', half: true, help: 'e.g. Policies, Reports, Forms' },
         { k: 'tender_id', l: 'Belongs to tender', t: 'tender', half: true, help: 'Leave blank for a general document. Tender documents disappear when the tender closes.' },
+        { k: 'article_id', l: 'Belongs to article', t: 'article', half: true, help: 'Optional. A document can belong to a tender or an article, not both. It is available only while the article is.' },
         { k: 'description', l: 'Description', t: 'textarea' }
       ]
     }
@@ -127,10 +128,10 @@
   var TYPE_ORDER = ['articles', 'careers', 'tenders', 'documents'];
 
   /* ------------------------------------------------------------ routing */
-  var route = { view: 'articles', id: null, isNew: false, tender: null };
+  var route = { view: 'articles', id: null, isNew: false, tender: null, article: null };
   function readRoute() {
     var q = new URLSearchParams(location.search);
-    route = { view: q.get('view') || 'articles', id: q.get('id'), isNew: q.get('new') === '1', tender: q.get('tender') };
+    route = { view: q.get('view') || 'articles', id: q.get('id'), isNew: q.get('new') === '1', tender: q.get('tender'), article: q.get('article') };
   }
   function go(view, extra) {
     var q = new URLSearchParams({ view: view });
@@ -347,11 +348,13 @@
       if (!res.data) { clear(el); return el.appendChild(h('div', { class: 'a-card a-note err' }, 'That item no longer exists.')); }
       row = res.data;
       if (row.deleted_at) { clear(el); return el.appendChild(h('div', { class: 'a-card a-note' }, 'This item is in the bin.')); }
-    } else if (type === 'documents' && route.tender) {
-      row.tender_id = route.tender;
+    } else if (type === 'documents' && (route.tender || route.article)) {
+      row.tender_id = route.tender; row.article_id = route.article;
     }
-    var tenders = [];
+    var tenders = [], articlesList = [];
     if (type === 'documents') {
+      var ar = await db.from('articles').select('id,title').is('deleted_at', null).order('title');
+      articlesList = ar.data || [];
       var tr = await db.from('tenders').select('id,title,reference_no').is('deleted_at', null).order('title');
       tenders = tr.data || [];
     }
@@ -363,6 +366,8 @@
       else if (f.t === 'select') input = h('select', { id: id }, f.opts.map(function (o) { return h('option', { value: o, selected: o === (v || '') ? true : null }, o || '—'); }));
       else if (f.t === 'tender') input = h('select', { id: id }, h('option', { value: '' }, 'None (general document)'),
         tenders.map(function (t) { return h('option', { value: t.id, selected: t.id === v ? true : null }, (t.reference_no ? t.reference_no + ' — ' : '') + t.title); }));
+      else if (f.t === 'article') input = h('select', { id: id }, h('option', { value: '' }, 'None'),
+        articlesList.map(function (a) { return h('option', { value: a.id, selected: a.id === v ? true : null }, a.title); }));
       else if (f.t === 'datetime') input = h('input', { id: id, type: 'datetime-local', value: toLocalInput(v) });
       else input = h('input', { id: id, type: f.t, value: v || '' });
       if (f.req) input.required = true;
@@ -398,8 +403,8 @@
         row.image_url ? h('div', { class: 'help' }, 'Current image is kept unless you choose a new one.') : null));
     }
 
-    var attach = null;                       // tenders: attach documents while creating / editing
-    if (type === 'tenders') { attach = makeAttachPicker(); extra.push(attach.node); }
+    var attach = null;                       // tenders and articles: attach documents while creating / editing
+    if (type === 'tenders' || type === 'articles') { attach = makeAttachPicker(type === 'tenders' ? 'Tender documents' : 'Documents'); extra.push(attach.node); }
 
     var saveBtn = h('button', { class: 'a-btn', type: 'submit' }, route.id ? 'Save changes' : 'Create ' + T.one);
     var form = h('form', { class: 'a-card', onsubmit: onSave },
@@ -425,6 +430,7 @@
       if (payload.published_at && payload.expires_at && new Date(payload.expires_at) <= new Date(payload.published_at)) {
         return toast(T.expiry + ' must be after the publish date.', true);
       }
+      if (type === 'documents' && payload.tender_id && payload.article_id) return toast('A document can belong to a tender or an article, not both.', true);
       var f1 = fileInput && fileInput.files[0], f2 = imgInput && imgInput.files[0];
       if (f1) { var bad = checkFile(f1, FILE_EXT); if (bad) return toast(bad, true); }
       if (f2) { var bad2 = checkFile(f2, /\.(png|jpe?g|webp)$/i); if (bad2) return toast(bad2, true); }
@@ -445,13 +451,13 @@
           catch (err) { toast('Saved, but the file did not upload: ' + msgOf(err) + '. Open the document to retry.', true); return go(type, { id: saved.id }); }
         }
         if (attach && attach.items.length) {
-          var r2 = await attachToTender(saved, attach.items);
-          if (r2.failed.length) toast('Tender saved. ' + r2.failed.length + ' document(s) did not attach: ' + r2.failed.join('; ') + '. Add them again from this page.', true);
+          var r2 = await attachToParent(type === 'tenders' ? 'tender' : 'article', saved, attach.items);
+          if (r2.failed.length) toast(T.one.charAt(0).toUpperCase() + T.one.slice(1) + ' saved. ' + r2.failed.length + ' document(s) did not attach: ' + r2.failed.join('; ') + '. Add them again from this page.', true);
           else toast('Saved, with ' + r2.ok + ' document' + (r2.ok === 1 ? '' : 's') + ' attached.');
           return go(type, { id: saved.id });
         }
         toast('Saved.');
-        go(type, type === 'tenders' && !route.id ? { id: saved.id } : null);
+        go(type, (type === 'tenders' || type === 'articles') && !route.id ? { id: saved.id } : null);
       } catch (err) { toast(msgOf(err), true); saveBtn.disabled = false; }
     }
 
@@ -462,12 +468,12 @@
     el.appendChild(form);
 
     if (type === 'documents' && route.id) await renderVersions(el, row);
-    if (type === 'tenders' && route.id) await renderTenderDocs(el, row);
+    if ((type === 'tenders' || type === 'articles') && route.id) await renderAttachedDocs(el, type === 'tenders' ? 'tender' : 'article', row);
   }
 
-  /* Pick several files while creating or editing a tender. Each becomes a
-   * document of that tender (published, so it goes live with the tender). */
-  function makeAttachPicker() {
+  /* Pick several files while creating or editing a tender or article. Each
+   * becomes a document of that parent (published, so it goes live with it). */
+  function makeAttachPicker(label) {
     var items = [];
     var list = h('div', { class: 'a-attach-list' });
     var input = h('input', { id: 'f_attach', type: 'file', multiple: true, accept: '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.csv,.txt,.png,.jpg,.jpeg' });
@@ -489,17 +495,17 @@
       input.value = '';
       draw();
     });
-    var node = h('div', { class: 'a-field' }, h('label', { for: 'f_attach' }, 'Tender documents'), input,
-      h('div', { class: 'help' }, 'Choose one or more files (up to 50 MB each); change their titles below. They are attached when you save and go live with the tender. You can add more or upload newer versions later.'), list);
+    var node = h('div', { class: 'a-field' }, h('label', { for: 'f_attach' }, label), input,
+      h('div', { class: 'help' }, 'Choose one or more files (up to 50 MB each); change their titles below. They are attached when you save and go live with it. You can add more or upload newer versions later.'), list);
     return { node: node, items: items };
   }
 
-  async function attachToTender(tender, items) {
+  async function attachToParent(kind, parent, items) {
     var ok = 0, failed = [];
     for (var i = 0; i < items.length; i++) {
       var it = items[i], docId = null;
       try {
-        var d = await db.from('documents').insert({ title: (it.title || '').trim() || it.file.name, category: 'Tender documents', tender_id: tender.id, status: 'published' }).select().single();
+        var d = await db.from('documents').insert({ title: (it.title || '').trim() || it.file.name, category: kind === 'tender' ? 'Tender documents' : 'Article documents', tender_id: kind === 'tender' ? parent.id : null, article_id: kind === 'article' ? parent.id : null, status: 'published' }).select().single();
         if (d.error) throw d.error;
         docId = d.data.id;
         await uploadVersion(docId, it.file, null);
@@ -588,8 +594,8 @@
     render();
   }
 
-  async function renderTenderDocs(el, tender) {
-    var res = await db.from('documents').select('id,title,status,published_at,expires_at,deleted_at,current_version_id').eq('tender_id', tender.id).is('deleted_at', null).order('title');
+  async function renderAttachedDocs(el, kind, parent) {
+    var res = await db.from('documents').select('id,title,status,published_at,expires_at,deleted_at,current_version_id').eq(kind + '_id', parent.id).is('deleted_at', null).order('title');
     var docs = res.data || [];
     var files = {};
     if (docs.length) {
@@ -603,7 +609,7 @@
             h('div', { class: 'm' }, cur ? cur.file_name + ' (v' + cur.version_number + ')' : 'No file yet')), h('td', null, badge(d)),
           h('td', { class: 'act' }, h('button', { class: 'a-btn ghost small', onclick: function () { go('documents', { id: d.id }); } }, 'Open')));
       }))) : h('p', { class: 'a-empty' }, 'No documents attached yet.'),
-      h('p', null, h('button', { class: 'a-btn', onclick: function () { go('documents', { new: '1', tender: tender.id }); } }, 'Add document'))));
+      h('p', null, h('button', { class: 'a-btn', onclick: function () { var x = { new: '1' }; x[kind] = parent.id; go('documents', x); } }, 'Add document'))));
   }
 
   /* ------------------------------------------------------------ bin */
@@ -650,7 +656,7 @@
       if (paths.length) { var rm = await db.storage.from(DOC_BUCKET).remove(paths); if (rm.error) return toast(msgOf(rm.error), true); }
     }
     var d = await db.from(TYPES[x.type].table).delete().eq('id', x.row.id);
-    if (d.error) return toast(msgOf(d.error) + (x.type === 'tenders' ? ' (Delete or move its documents first.)' : ''), true);
+    if (d.error) return toast(msgOf(d.error) + ((x.type === 'tenders' || x.type === 'articles') ? ' (Delete or move its documents first.)' : ''), true);
     toast('Deleted permanently.'); render();
   }
 

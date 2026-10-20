@@ -138,8 +138,8 @@
   var isHttps = function (u) { return /^https:\/\//i.test(u || ''); };
   var articleDate = function (a) { return a.published_at || a.created_at; };
 
-  function newsCard(a) {
-    var internal = !!(a.body && a.body.trim());
+  function newsCard(a, hasDocs) {
+    var internal = !!(a.body && a.body.trim()) || !!hasDocs;
     var href = internal ? 'article.html?id=' + encodeURIComponent(a.id) : (isHttp(a.source_url) ? a.source_url : null);
     var link = href ? h('a', { class: 'btn ghost small', href: href, target: internal ? null : '_blank', rel: internal ? null : 'noopener' }, 'Read More') : null;
     return h('article', { class: 'news-card' },
@@ -158,9 +158,15 @@
     var rows = (r.data || []).filter(stillOpen);
     rows.sort(function (x, y) { return new Date(articleDate(y)) - new Date(articleDate(x)); });
     if (!rows.length) return note(mount, 'There is no news to show right now. Please check back soon.');
+    var withDocs = {};                      // articles that have downloadable documents
+    var dres = await c.from('documents').select('article_id,current_version_id').not('article_id', 'is', null);
+    var vres = await c.from('document_versions').select('id');
+    var okVersions = {};
+    (vres.data || []).forEach(function (v) { okVersions[v.id] = true; });
+    (dres.data || []).forEach(function (d) { if (okVersions[d.current_version_id]) withDocs[d.article_id] = true; });
     var shown = 0, grid = h('div', { class: 'grid g3 news-grid' }), more = h('p', { class: 'listing-actions center-actions' });
     function draw() {
-      rows.slice(shown, shown + PAGE).forEach(function (a) { grid.appendChild(newsCard(a)); });
+      rows.slice(shown, shown + PAGE).forEach(function (a) { grid.appendChild(newsCard(a, withDocs[a.id])); });
       shown = Math.min(rows.length, shown + PAGE);
       clear(more);
       if (shown < rows.length) more.appendChild(h('button', { class: 'btn ghost', type: 'button', onclick: draw }, 'Show more news'));
@@ -180,6 +186,11 @@
     var a = r.data;
     if (!a || !stillOpen(a)) return missing('This article is no longer available.');
     document.title = a.title + ' | Siyanda Resources';
+    var dr = await c.from('documents').select('id,title,description,current_version_id').eq('article_id', a.id).order('title');
+    var vr = await c.from('document_versions').select('id,document_id,version_number,storage_path,file_name,size_bytes,change_note,uploaded_at');
+    var vmap = {};
+    (vr.data || []).forEach(function (x) { vmap[x.id] = x; });
+    var attached = (dr.data || []).map(function (d) { d.version = vmap[d.current_version_id]; return d; }).filter(function (d) { return d.version; });
     var paras = (a.body || '').split(/\n{2,}/).map(function (x) { return x.trim(); }).filter(Boolean);
     clear(mount);
     mount.appendChild(back);
@@ -189,6 +200,16 @@
       isHttps(a.image_url) ? h('img', { class: 'article-img', src: a.image_url, alt: '' }) : null,
       a.summary ? h('p', { class: 'lead' }, a.summary) : null,
       paras.map(function (x) { return h('p', { class: 'pre' }, x); }),
+      attached.length ? h('div', { class: 'listing article-docs' }, h('h4', null, 'Documents'),
+        attached.map(function (d) {
+          var v = d.version, btn = h('button', { class: 'btn small', type: 'button' }, 'Download');
+          btn.addEventListener('click', function () { download(c, v, btn); });
+          return h('div', { class: 'listing-doc' },
+            h('div', null, h('div', { class: 'doc-title' }, d.title),
+              d.description ? h('div', { class: 'meta' }, d.description) : null,
+              h('div', { class: 'meta' }, [v.file_name, fmtSize(v.size_bytes), 'Version ' + v.version_number, 'Updated ' + fmtDate(v.uploaded_at)].join(' · '))),
+            btn);
+        })) : null,
       isHttp(a.source_url) ? h('p', { class: 'listing-actions' }, h('a', { class: 'btn ghost small', href: a.source_url, target: '_blank', rel: 'noopener' }, 'Read the original article')) : null));
   }
 
@@ -197,8 +218,8 @@
     var c = db();
     var fail = 'We could not load the documents. Please try again later.';
     if (!c) return note(mount, fail);
-    // general documents only: ones attached to a tender are listed on the Tenders page
-    var dr = await c.from('documents').select('id,title,description,category,current_version_id,expires_at').is('tender_id', null).order('title');
+    // general documents only: tender documents are listed on the Tenders page, article documents on their article
+    var dr = await c.from('documents').select('id,title,description,category,current_version_id,expires_at').is('tender_id', null).is('article_id', null).order('title');
     if (dr.error) return note(mount, fail);
     var vr = await c.from('document_versions').select('id,document_id,version_number,storage_path,file_name,size_bytes,change_note,uploaded_at');
     if (vr.error) return note(mount, fail);
