@@ -105,9 +105,10 @@ p { margin: 0 0 1.1em; }
 .section.alt .card { border-color: transparent; }
 
 /* ===== Values ===== */
-.value { padding: 28px 24px; border-top: 3px solid var(--accent); background: var(--paper); }
-.value h3 { text-transform: uppercase; letter-spacing: .1em; font-size: .95rem; color: var(--accent-dark); }
-.value p { margin: 0; color: var(--ink-soft); font-weight: 500; }
+.value { padding: 28px 22px 30px; background: var(--highlight); color: #1a1818; text-align: center; }
+.value img { width: 110px; height: auto; margin: 0 auto 14px; }
+.value h3 { font-size: 1.15rem; color: #1a1818; margin-bottom: .4em; }
+.value p { margin: 0; color: #1a1818; font-weight: 500; font-size: .95rem; }
 
 /* ===== Feature banner (impact report) ===== */
 .banner { background-size: cover; background-position: center; position: relative; color: #fff; padding: clamp(70px, 10vw, 130px) 0; }
@@ -355,3 +356,5 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 .doc-group h3 { margin: 0 0 8px; font-size: 1.1rem; }
 .doc-group .listing-doc:first-of-type { border-top: 0; }
 .doc-ext { margin-left: 10px; padding: 2px 7px; font-size: .62rem; vertical-align: middle; }
+
+#vacancies-section { scroll-margin-top: calc(var(--header-h) + 12px); }
