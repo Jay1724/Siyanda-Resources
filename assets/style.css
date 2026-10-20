@@ -309,3 +309,26 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 
 /* ===== Heading highlights ===== */
 .hl { color: var(--highlight); }
+
+/* ===== Listings fed by the content portal (careers, tenders) ===== */
+.listing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; text-align: left; margin-top: 12px; }
+.listing-grid.one { grid-template-columns: 1fr; max-width: 900px; margin-inline: auto; }
+.listing { background: var(--paper); border: 1px solid var(--line); padding: 24px; }
+.section.alt .listing, .listing-mount .listing { border-color: var(--line); }
+.listing-head { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; }
+.listing-head h3 { margin: 0; font-size: 1.15rem; flex: 1; min-width: 200px; }
+.listing .meta { color: var(--muted); font-size: .9rem; margin: 8px 0 0; }
+.listing .pre { white-space: pre-line; margin: 12px 0; color: var(--ink-soft); }
+.listing h4 { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; margin: 18px 0 6px; color: var(--accent-dark); }
+.listing-more { margin-top: 14px; }
+.listing-more summary { cursor: pointer; font: 600 .8rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark); }
+.listing-actions { margin: 16px 0 0; display: flex; gap: 10px; flex-wrap: wrap; }
+.listing .btn.small { padding: 9px 16px; font-size: .72rem; }
+.listing-doc { display: flex; gap: 16px; justify-content: space-between; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); }
+.listing-doc .doc-title { font-weight: 600; }
+.listing-doc .meta { margin: 2px 0 0; }
+.chip { display: inline-block; font: 600 .72rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; padding: 5px 10px; border: 1px solid var(--line); background: var(--paper-alt); color: var(--ink-soft); white-space: nowrap; }
+.chip.soon { background: #fff4d6; border-color: #f2dc9b; color: #8a5a00; }
+:root[data-theme="dark"] .chip.soon { background: #3a2c08; border-color: #5a4512; color: #f0cf7a; }
+.listing-note { text-align: center; color: var(--muted); padding: 28px 12px; margin: 0; }
+@media (max-width: 560px) { .listing-doc { flex-direction: column; align-items: flex-start; } }
