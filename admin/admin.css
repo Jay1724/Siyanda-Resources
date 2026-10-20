@@ -74,3 +74,9 @@
 .a-ver { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .a-ver:last-child { border-bottom: 0; }
 .a-ver .n { font: 700 .95rem var(--font-head); min-width: 44px; }
+
+/* attach several documents to a tender */
+.a-attach-list { margin-top: 12px; display: grid; gap: 8px; }
+.a-attach-row { display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 12px; align-items: center; padding: 8px 10px; background: var(--paper-alt); border: 1px solid var(--line); }
+.a-attach-meta { color: var(--muted); font-size: .82rem; word-break: break-all; }
+@media (max-width: 700px) { .a-attach-row { grid-template-columns: 1fr; } }
