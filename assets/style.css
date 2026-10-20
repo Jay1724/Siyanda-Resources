@@ -332,3 +332,13 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 :root[data-theme="dark"] .chip.soon { background: #3a2c08; border-color: #5a4512; color: #f0cf7a; }
 .listing-note { text-align: center; color: var(--muted); padding: 28px 12px; margin: 0; }
 @media (max-width: 560px) { .listing-doc { flex-direction: column; align-items: flex-start; } }
+
+/* ===== News from the portal ===== */
+.news-card { flex-direction: column; }
+.news-thumb { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.center-actions { justify-content: center; margin-top: 28px; }
+.a-back { font: 600 .8rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-dark); text-decoration: none; }
+.article h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: .3em; }
+.article .meta { color: var(--muted); margin: 0 0 20px; }
+.article-img { width: 100%; max-height: 460px; object-fit: cover; margin: 0 0 24px; }
+.article .pre { white-space: pre-line; margin: 0 0 1.1em; }
