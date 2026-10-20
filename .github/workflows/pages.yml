@@ -29,6 +29,11 @@ jobs:
           mkdir _site
           cp -r *.html assets admin _site/
           touch _site/.nojekyll
+      - name: Stamp scripts and styles with this deploy's version
+        # GitHub Pages lets browsers keep a script for ~10 minutes. A new ?v=<commit>
+        # on every local .js/.css reference makes each deploy load fresh copies.
+        run: |
+          V="${GITHUB_SHA::7}" find _site -name '*.html' -exec perl -pi -e 's/\b(src|href)="((?!https?:\/\/)[^"?#]+\.(?:js|css))"/$1="$2?v=$ENV{V}"/g' {} +
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
