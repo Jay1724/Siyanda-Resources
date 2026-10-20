@@ -1,0 +1,76 @@
+/* Admin portal styles — builds on the site's colour tokens (assets/style.css). */
+.a-body { background: var(--paper-alt); min-height: 100vh; }
+.a-loading { padding: 40px; text-align: center; color: var(--muted); }
+.a-wrap { width: min(1100px, 100% - 32px); margin-inline: auto; }
+
+.a-top { background: var(--paper); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+.a-top .a-wrap { display: flex; align-items: center; gap: 16px; min-height: 60px; flex-wrap: wrap; padding: 8px 0; }
+.a-brand { font: 700 1rem var(--font-head); letter-spacing: .02em; margin-right: auto; }
+.a-brand span { color: var(--accent-dark); }
+.a-user { font-size: .85rem; color: var(--ink-soft); display: flex; gap: 10px; align-items: center; }
+.a-nav { display: flex; gap: 4px; flex-wrap: wrap; border-top: 1px solid var(--line); }
+.a-nav .a-wrap { display: flex; gap: 4px; flex-wrap: wrap; padding: 0; min-height: 0; }
+.a-nav button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 12px 14px; font: 600 .82rem var(--font-head); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; }
+.a-nav button:hover { color: var(--ink); }
+.a-nav button[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+.a-main { padding: 28px 0 80px; }
+.a-main h1 { font-size: 1.6rem; margin-bottom: .2em; }
+.a-sub { color: var(--muted); margin: 0 0 20px; font-size: .95rem; }
+.a-card { background: var(--paper); border: 1px solid var(--line); padding: 22px; margin-bottom: 20px; }
+.a-card h2 { font-size: 1.1rem; margin-bottom: .8em; }
+.a-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.a-bar .grow { flex: 1; min-width: 160px; }
+
+.a-btn { font: 600 .8rem var(--font-head); letter-spacing: .05em; text-transform: uppercase; padding: 10px 16px; border: 2px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; text-decoration: none; display: inline-block; }
+.a-btn:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+.a-btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.a-btn.ghost:hover { border-color: var(--ink); }
+.a-btn.danger { background: transparent; color: #b3261e; border-color: #b3261e; }
+.a-btn.danger:hover { background: #b3261e; color: #fff; }
+.a-btn.small { padding: 6px 10px; font-size: .72rem; }
+.a-btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+.a-field { margin-bottom: 16px; }
+.a-field label { display: block; font: 600 .8rem var(--font-head); letter-spacing: .04em; margin-bottom: 6px; }
+.a-field .help { color: var(--muted); font-size: .8rem; margin-top: 4px; }
+.a-field input, .a-field select, .a-field textarea, .a-input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; font-size: .95rem; }
+.a-field textarea { min-height: 140px; resize: vertical; }
+.a-field input:focus, .a-field select:focus, .a-field textarea:focus, .a-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.a-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+@media (max-width: 700px) { .a-grid2 { grid-template-columns: 1fr; } }
+.req { color: #b3261e; }
+
+.a-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.a-table th { text-align: left; font: 600 .72rem var(--font-head); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 10px 12px; border-bottom: 2px solid var(--line); }
+.a-table td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.a-table .t { font-weight: 600; }
+.a-table .m { color: var(--muted); font-size: .82rem; }
+.a-table .act { text-align: right; white-space: nowrap; }
+.a-table .act > * { margin-left: 6px; }
+@media (max-width: 760px) { .a-table thead { display: none; } .a-table tr { display: block; border-bottom: 1px solid var(--line); padding: 8px 0; } .a-table td { display: block; border: 0; padding: 4px 12px; } .a-table .act { text-align: left; } .a-table .act > * { margin: 4px 6px 0 0; } }
+.a-empty { text-align: center; color: var(--muted); padding: 40px 12px; }
+
+.badge { display: inline-block; font: 600 .68rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--paper-alt); color: var(--ink-soft); border: 1px solid var(--line); }
+.badge.live { background: #e3f4e8; color: #17653a; border-color: #b9e3c7; }
+.badge.soon { background: #fff4d6; color: #8a5a00; border-color: #f2dc9b; }
+.badge.expired { background: #fde7e5; color: #b3261e; border-color: #f4c4bf; }
+.badge.scheduled { background: #e5eefc; color: #1d4ea3; border-color: #bfd3f4; }
+.badge.draft { background: var(--paper-alt); }
+.badge.role { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+:root[data-theme="dark"] .badge.live { background: #12301f; color: #8fd8ab; border-color: #1f5033; }
+:root[data-theme="dark"] .badge.soon { background: #3a2c08; color: #f0cf7a; border-color: #5a4512; }
+:root[data-theme="dark"] .badge.expired { background: #3a1613; color: #f1a39b; border-color: #5c2a25; }
+:root[data-theme="dark"] .badge.scheduled { background: #14233f; color: #a9c4f2; border-color: #243b66; }
+
+.a-login { max-width: 420px; margin: 12vh auto 0; }
+.a-login .a-card { padding: 30px; }
+.a-link { background: none; border: 0; padding: 0; color: var(--accent-dark); text-decoration: underline; cursor: pointer; font: inherit; font-size: .88rem; }
+.a-note { padding: 12px 14px; background: var(--paper-alt); border-left: 3px solid var(--accent); font-size: .9rem; margin-bottom: 16px; }
+.a-note.err { border-left-color: #b3261e; }
+.a-toasts { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; z-index: 50; max-width: min(380px, calc(100vw - 32px)); }
+.a-toast { background: var(--ink); color: var(--paper); padding: 12px 16px; font-size: .9rem; box-shadow: 0 4px 18px rgba(0,0,0,.25); }
+.a-toast.err { background: #b3261e; color: #fff; }
+.a-ver { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.a-ver:last-child { border-bottom: 0; }
+.a-ver .n { font: 700 .95rem var(--font-head); min-width: 44px; }
