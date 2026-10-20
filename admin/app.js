@@ -398,6 +398,9 @@
         row.image_url ? h('div', { class: 'help' }, 'Current image is kept unless you choose a new one.') : null));
     }
 
+    var attach = null;                       // tenders: attach documents while creating / editing
+    if (type === 'tenders') { attach = makeAttachPicker(); extra.push(attach.node); }
+
     var saveBtn = h('button', { class: 'a-btn', type: 'submit' }, route.id ? 'Save changes' : 'Create ' + T.one);
     var form = h('form', { class: 'a-card', onsubmit: onSave },
       fieldNodes, extra,
@@ -441,6 +444,12 @@
           try { await uploadVersion(saved.id, f1, null); }
           catch (err) { toast('Saved, but the file did not upload: ' + msgOf(err) + '. Open the document to retry.', true); return go(type, { id: saved.id }); }
         }
+        if (attach && attach.items.length) {
+          var r2 = await attachToTender(saved, attach.items);
+          if (r2.failed.length) toast('Tender saved. ' + r2.failed.length + ' document(s) did not attach: ' + r2.failed.join('; ') + '. Add them again from this page.', true);
+          else toast('Saved, with ' + r2.ok + ' document' + (r2.ok === 1 ? '' : 's') + ' attached.');
+          return go(type, { id: saved.id });
+        }
         toast('Saved.');
         go(type, type === 'tenders' && !route.id ? { id: saved.id } : null);
       } catch (err) { toast(msgOf(err), true); saveBtn.disabled = false; }
@@ -454,6 +463,54 @@
 
     if (type === 'documents' && route.id) await renderVersions(el, row);
     if (type === 'tenders' && route.id) await renderTenderDocs(el, row);
+  }
+
+  /* Pick several files while creating or editing a tender. Each becomes a
+   * document of that tender (published, so it goes live with the tender). */
+  function makeAttachPicker() {
+    var items = [];
+    var list = h('div', { class: 'a-attach-list' });
+    var input = h('input', { id: 'f_attach', type: 'file', multiple: true, accept: '.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.csv,.txt,.png,.jpg,.jpeg' });
+    function draw() {
+      clear(list);
+      items.forEach(function (it, n) {
+        list.appendChild(h('div', { class: 'a-attach-row' },
+          h('input', { type: 'text', class: 'a-input', value: it.title, maxlength: 200, 'aria-label': 'Title for ' + it.file.name, oninput: function (e) { it.title = e.target.value; } }),
+          h('span', { class: 'a-attach-meta' }, it.file.name + ' · ' + fmtSize(it.file.size)),
+          h('button', { type: 'button', class: 'a-btn ghost small', onclick: function () { items.splice(n, 1); draw(); } }, 'Remove')));
+      });
+    }
+    input.addEventListener('change', function () {
+      Array.prototype.forEach.call(input.files, function (f) {
+        var bad = checkFile(f, FILE_EXT);
+        if (bad) return toast(bad, true);
+        items.push({ file: f, title: f.name.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ') });
+      });
+      input.value = '';
+      draw();
+    });
+    var node = h('div', { class: 'a-field' }, h('label', { for: 'f_attach' }, 'Tender documents'), input,
+      h('div', { class: 'help' }, 'Choose one or more files (up to 50 MB each); change their titles below. They are attached when you save and go live with the tender. You can add more or upload newer versions later.'), list);
+    return { node: node, items: items };
+  }
+
+  async function attachToTender(tender, items) {
+    var ok = 0, failed = [];
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i], docId = null;
+      try {
+        var d = await db.from('documents').insert({ title: (it.title || '').trim() || it.file.name, category: 'Tender documents', tender_id: tender.id, status: 'published' }).select().single();
+        if (d.error) throw d.error;
+        docId = d.data.id;
+        await uploadVersion(docId, it.file, null);
+        ok++;
+      } catch (err) {
+        failed.push(it.file.name + ' (' + msgOf(err) + ')');
+        // don't leave an empty document behind: move it to the bin
+        if (docId) await db.from('documents').update({ deleted_at: new Date().toISOString() }).eq('id', docId);
+      }
+    }
+    return { ok: ok, failed: failed };
   }
 
   function checkFile(f, rx) {
@@ -534,9 +591,16 @@
   async function renderTenderDocs(el, tender) {
     var res = await db.from('documents').select('id,title,status,published_at,expires_at,deleted_at,current_version_id').eq('tender_id', tender.id).is('deleted_at', null).order('title');
     var docs = res.data || [];
-    el.appendChild(h('div', { class: 'a-card' }, h('h2', null, 'Tender documents'),
+    var files = {};
+    if (docs.length) {
+      var vr = await db.from('document_versions').select('id,document_id,version_number,file_name').in('document_id', docs.map(function (d) { return d.id; }));
+      (vr.data || []).forEach(function (v) { files[v.id] = v; });
+    }
+    el.appendChild(h('div', { class: 'a-card' }, h('h2', null, 'Attached documents'),
       docs.length ? h('table', { class: 'a-table' }, h('tbody', null, docs.map(function (d) {
-        return h('tr', null, h('td', null, h('div', { class: 't' }, d.title)), h('td', null, badge(d)),
+        var cur = files[d.current_version_id];
+        return h('tr', null, h('td', null, h('div', { class: 't' }, d.title),
+            h('div', { class: 'm' }, cur ? cur.file_name + ' (v' + cur.version_number + ')' : 'No file yet')), h('td', null, badge(d)),
           h('td', { class: 'act' }, h('button', { class: 'a-btn ghost small', onclick: function () { go('documents', { id: d.id }); } }, 'Open')));
       }))) : h('p', { class: 'a-empty' }, 'No documents attached yet.'),
       h('p', null, h('button', { class: 'a-btn', onclick: function () { go('documents', { new: '1', tender: tender.id }); } }, 'Add document'))));

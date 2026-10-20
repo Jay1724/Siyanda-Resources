@@ -56,6 +56,8 @@ many people, as Supabase's built-in sender is rate limited.
 - **Expiry:** items have an optional *show from* and *expires on* date. The
   database decides what visitors can see at the moment they ask, so expired
   items disappear on their own with no scheduled job.
+- **Tender documents** belong to a tender, and can be attached right in the
+  tender form (several files at once). They go live with the tender.
 - **Tender documents** belong to a tender. When the tender closes or is
   deleted its documents stop being available too.
 - **Document versions:** every upload is a new version; old ones are kept and
