@@ -39,20 +39,23 @@ p { margin: 0 0 1.1em; }
 .lead { font-size: 1.2rem; color: var(--ink-soft); }
 
 /* ===== Header ===== */
-.site-header { position: sticky; top: 0; z-index: 50; background: var(--paper); border-bottom: 1px solid var(--line); }
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,.7); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(255,255,255,.12); }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); }
-.logo img { height: 46px; width: auto; }
+/* hero slides up under the translucent header */
+.site-header + main > .hero:first-child, .site-header + main > .page-hero:first-child { margin-top: calc(-1 * var(--header-h)); }
+.site-header + main > .page-hero:first-child { padding-top: calc(clamp(90px, 15vw, 170px) + var(--header-h)); }
+.logo img { height: 46px; width: auto; background: #fff; padding: 4px 8px; border-radius: 6px; box-sizing: content-box; }
 .nav { display: flex; gap: 6px; align-items: center; }
-.nav a { text-decoration: none; font-family: var(--font-head); font-size: .82rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 10px 12px; color: var(--ink-soft); border-bottom: 2px solid transparent; }
-.nav a:hover { color: var(--ink); }
-.nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
-.menu-btn { display: none; background: none; border: 1px solid var(--line); border-radius: 6px; padding: 9px 14px; font: 600 .8rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; color: var(--ink); }
+.nav a { text-decoration: none; font-family: var(--font-head); font-size: .82rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 10px 12px; color: rgba(255,255,255,.82); border-bottom: 2px solid transparent; }
+.nav a:hover { color: #fff; }
+.nav a[aria-current="page"] { color: #fff; border-bottom-color: var(--accent); }
+.menu-btn { display: none; background: none; border: 1px solid rgba(255,255,255,.35); border-radius: 6px; padding: 9px 14px; font: 600 .8rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; color: #fff; }
 
 @media (max-width: 1020px) {
   .menu-btn { display: block; }
-  .nav { position: absolute; inset: var(--header-h) 0 auto 0; background: var(--paper); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 20px 20px; border-bottom: 1px solid var(--line); display: none; }
+  .nav { position: absolute; inset: var(--header-h) 0 auto 0; background: rgba(0,0,0,.7); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.12); display: none; }
   .nav.open { display: flex; }
-  .nav a { padding: 14px 4px; border-bottom: 1px solid var(--line); }
+  .nav a { padding: 14px 4px; border-bottom: 1px solid rgba(255,255,255,.12); }
   .nav a[aria-current="page"] { border-bottom-color: var(--accent); }
 }
 
@@ -185,17 +188,17 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 @media (max-width: 640px) { .post { grid-template-columns: 1fr; gap: 6px; } }
 
 /* ===== Footer ===== */
-.site-footer { background: var(--dark); color: #cfcbc2; padding: 72px 0 28px; }
-.site-footer h2 { color: #fff; font-size: 1.6rem; max-width: 16ch; }
+.site-footer { background: #fff; color: #3a3f45; padding: 72px 0 0; border-top: 1px solid #e6e3dc; }
+.site-footer h2 { color: #111417; font-size: 1.6rem; max-width: 16ch; }
 .foot-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 48px; }
 @media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr; gap: 32px; } }
-.site-footer h4 { color: #fff; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 16px; }
+.site-footer h4 { color: #111417; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 16px; }
 .site-footer a { text-decoration: none; }
-.site-footer a:hover { color: #fff; text-decoration: underline; }
+.site-footer a:hover { color: #000; text-decoration: underline; }
 .site-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .socials { display: flex; gap: 12px; margin-top: 18px; }
-.socials a { border: 1px solid rgba(255,255,255,.3); padding: 8px 16px; font-family: var(--font-head); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
-.copy { border-top: 1px solid rgba(255,255,255,.12); margin-top: 52px; padding-top: 22px; font-size: .85rem; color: #8d9399; }
+.socials a { border: 1px solid #111417; color: #111417; padding: 8px 16px; font-family: var(--font-head); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+.copy { background: var(--highlight); color: #111417; margin-top: 52px; padding: 14px 0; font-size: .85rem; font-weight: 500; }
 
 @media (prefers-reduced-motion: reduce) {
   .slide, .slide .bg, .division img { transition: none; }
@@ -240,11 +243,10 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
   --line: #2b3036;
   --accent-dark: #d6aa5a;
 }
-:root[data-theme="dark"] .logo img { background: #fff; padding: 4px 8px; border-radius: 6px; height: 46px; box-sizing: content-box; }
 :root[data-theme="dark"] .section.dark .btn.ghost:hover, :root[data-theme="dark"] .hero .btn.ghost:hover { color: #111417; }
 
 .logo { margin-right: auto; }
-.theme-toggle { display: inline-grid; place-items: center; width: 40px; height: 40px; margin-left: 8px; background: none; border: 1px solid var(--line); border-radius: 50%; color: var(--ink); cursor: pointer; }
+.theme-toggle { display: inline-grid; place-items: center; width: 40px; height: 40px; margin-left: 8px; background: none; border: 1px solid rgba(255,255,255,.35); border-radius: 50%; color: #fff; cursor: pointer; }
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 .theme-toggle .i-sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
