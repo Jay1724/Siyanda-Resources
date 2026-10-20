@@ -66,6 +66,14 @@ many people, as Supabase's built-in sender is rate limited.
 - **Activity:** every create, edit, delete and role change is logged for
   super admins.
 
+## Status
+
+The project **Siyanda Resources** (`yvmivogkfjgvwmsssnfd`) has the schema
+(both migrations), the storage buckets and the `admin-users` function
+deployed, and `admin/config.js` points at it. Still to do by hand (steps 2, 3
+and 4 above): turn off public sign-ups, set the Site URL / redirect URL, and
+create the first super admin.
+
 ## Not done yet
 
 - The public Careers / Tenders / News / Documents pages still show the old
