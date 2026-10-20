@@ -342,3 +342,16 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 .article .meta { color: var(--muted); margin: 0 0 20px; }
 .article-img { width: 100%; max-height: 460px; object-fit: cover; margin: 0 0 24px; }
 .article .pre { white-space: pre-line; margin: 0 0 1.1em; }
+
+/* ===== Document library ===== */
+.doc-tools { display: grid; gap: 14px; margin-bottom: 24px; }
+.doc-search { width: 100%; padding: 12px 14px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: inherit; }
+.doc-search:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.doc-cats { display: flex; gap: 8px; flex-wrap: wrap; }
+.doc-chip { font: 600 .75rem var(--font-head); letter-spacing: .06em; text-transform: uppercase; padding: 8px 14px; border: 1px solid var(--line); background: var(--paper); color: var(--ink-soft); cursor: pointer; }
+.doc-chip:hover { border-color: var(--ink); }
+.doc-chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.doc-group { margin-bottom: 20px; }
+.doc-group h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.doc-group .listing-doc:first-of-type { border-top: 0; }
+.doc-ext { margin-left: 10px; padding: 2px 7px; font-size: .62rem; vertical-align: middle; }

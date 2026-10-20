@@ -94,9 +94,16 @@ create the first super admin.
   still point at the old Wix site until you add article text or new links).
   The two video cards at the bottom of the page are still static.
 
+- **Documents** (`documents.html`, linked in the footer) is the library of
+  general documents (those not attached to a tender), grouped by category with
+  search and category filters. Each shows the current version only (type, size,
+  version number, updated date) and downloads through a 5-minute signed link.
+  Documents attached to a tender appear on the Tenders page instead. The
+  category is the free-text *Category* field in the portal; documents with none
+  are listed under "General".
+
 ## Not done yet
 
-- The general Documents library (non-tender documents) has no public page yet.
 - Article photos for the five migrated articles, and the Nyandeni / Implats
   videos on the News page.
 - Email reminders before an item expires.

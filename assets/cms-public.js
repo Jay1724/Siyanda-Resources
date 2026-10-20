@@ -1,6 +1,7 @@
 /* Public pages fed by the content portal (Supabase).
  * careers.html -> #vacancies      tenders.html -> #tenders
  * news.html -> #news               article.html -> #article
+ * documents.html -> #documents
  * Visitors only ever receive items that are published and not expired: the
  * database's row level security decides that, this file just displays them.
  * Everything is built with textContent / DOM nodes (never innerHTML), so
@@ -191,10 +192,74 @@
       isHttp(a.source_url) ? h('p', { class: 'listing-actions' }, h('a', { class: 'btn ghost small', href: a.source_url, target: '_blank', rel: 'noopener' }, 'Read the original article')) : null));
   }
 
+  /* ---------------------------------------------------------- documents library */
+  async function renderDocuments(mount) {
+    var c = db();
+    var fail = 'We could not load the documents. Please try again later.';
+    if (!c) return note(mount, fail);
+    // general documents only: ones attached to a tender are listed on the Tenders page
+    var dr = await c.from('documents').select('id,title,description,category,current_version_id,expires_at').is('tender_id', null).order('title');
+    if (dr.error) return note(mount, fail);
+    var vr = await c.from('document_versions').select('id,document_id,version_number,storage_path,file_name,size_bytes,change_note,uploaded_at');
+    if (vr.error) return note(mount, fail);
+    var versions = {};
+    (vr.data || []).forEach(function (x) { versions[x.id] = x; });
+    var docs = (dr.data || []).filter(stillOpen).map(function (d) { d.version = versions[d.current_version_id]; return d; })
+      .filter(function (d) { return d.version; });          // only what a visitor can actually download
+    if (!docs.length) return note(mount, 'There are no documents available at the moment. Please check back soon.');
+
+    var catOf = function (d) { return (d.category || '').trim() || 'General'; };
+    var cats = Array.from(new Set(docs.map(catOf))).sort(function (a, b) {
+      return a === 'General' ? 1 : b === 'General' ? -1 : a.localeCompare(b);
+    });
+    var state = { q: '', cat: '' };
+    var search = h('input', { class: 'doc-search', type: 'search', placeholder: 'Search documents…', 'aria-label': 'Search documents' });
+    var chips = h('div', { class: 'doc-cats', role: 'group', 'aria-label': 'Filter by category' });
+    var list = h('div', { 'aria-live': 'polite' });
+
+    function chipBtn(label, value) {
+      return h('button', { type: 'button', class: 'doc-chip', 'aria-pressed': state.cat === value ? 'true' : 'false',
+        onclick: function () { state.cat = value; drawChips(); draw(); } }, label);
+    }
+    function drawChips() { clear(chips); chips.appendChild(chipBtn('All', '')); cats.forEach(function (x) { chips.appendChild(chipBtn(x, x)); }); }
+
+    function row(d) {
+      var v = d.version, ext = (v.file_name.split('.').pop() || '').toUpperCase().slice(0, 5);
+      var btn = h('button', { class: 'btn small', type: 'button' }, 'Download');
+      btn.addEventListener('click', function () { download(c, v, btn); });
+      return h('div', { class: 'listing-doc' },
+        h('div', null, h('div', { class: 'doc-title' }, d.title, ext ? h('span', { class: 'chip doc-ext' }, ext) : null),
+          d.description ? h('div', { class: 'meta' }, d.description) : null,
+          h('div', { class: 'meta' }, [fmtSize(v.size_bytes), 'Version ' + v.version_number, 'Updated ' + fmtDate(v.uploaded_at)].join(' · '))),
+        btn);
+    }
+    function draw() {
+      state.q = search.value.trim().toLowerCase();
+      var shown = docs.filter(function (d) {
+        if (state.cat && catOf(d) !== state.cat) return false;
+        return !state.q || (d.title + ' ' + (d.description || '') + ' ' + d.version.file_name).toLowerCase().indexOf(state.q) > -1;
+      });
+      clear(list);
+      if (!shown.length) return list.appendChild(h('p', { class: 'listing-note' }, 'No documents match your search.'));
+      cats.forEach(function (cat) {
+        var rows = shown.filter(function (d) { return catOf(d) === cat; });
+        if (rows.length) list.appendChild(h('section', { class: 'listing doc-group' }, h('h3', null, cat), rows.map(row)));
+      });
+    }
+    search.addEventListener('input', draw);
+    drawChips();
+    clear(mount);
+    mount.appendChild(h('div', { class: 'doc-tools' }, search, chips));
+    mount.appendChild(list);
+    draw();
+  }
+
   /* ---------------------------------------------------------- boot */
   var v = document.getElementById('vacancies'), t = document.getElementById('tenders');
   if (v) renderVacancies(v).catch(function () { note(v, 'We could not load the current vacancies. Please try again later.'); });
   if (t) renderTenders(t).catch(function () { note(t, 'We could not load the current tenders. Please try again later.'); });
+  var dl = document.getElementById('documents');
+  if (dl) renderDocuments(dl).catch(function () { note(dl, 'We could not load the documents. Please try again later.'); });
   var n = document.getElementById('news'), ar = document.getElementById('article');
   if (n) renderNews(n).catch(function () { note(n, 'We could not load the latest news. Please try again later.'); });
   if (ar) renderArticle(ar).catch(function () { note(ar, 'We could not load this article. Please try again later.'); });
