@@ -355,3 +355,4 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 .doc-group h3 { margin: 0 0 8px; font-size: 1.1rem; }
 .doc-group .listing-doc:first-of-type { border-top: 0; }
 .doc-ext { margin-left: 10px; padding: 2px 7px; font-size: .62rem; vertical-align: middle; }
+.article-docs { margin: 28px 0 8px; }

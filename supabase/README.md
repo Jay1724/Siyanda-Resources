@@ -60,6 +60,11 @@ many people, as Supabase's built-in sender is rate limited.
   tender form (several files at once). They go live with the tender.
 - **Tender documents** belong to a tender. When the tender closes or is
   deleted its documents stop being available too.
+- **Article documents:** an article can have documents attached (in the
+  article form, several at once). They appear in a Documents box on the
+  article's page, are available only while the article is live, and are not
+  listed in the general Documents library. A document belongs to a tender, an
+  article, or neither, never both.
 - **Document versions:** every upload is a new version; old ones are kept and
   can be made current again. Visitors only get the current version. Files sit in
   a private storage bucket and are served through short-lived links.
