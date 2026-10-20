@@ -43,7 +43,7 @@ website visitors, including their downloadable files.
    Or create a function named `admin-users` in the dashboard (Edge Functions)
    and paste in `supabase/functions/admin-users/index.ts`. It uses keys that
    Supabase provides to functions automatically; nothing to configure.
-6. **Connect the portal.** Edit `admin/config.js` and fill in the project URL
+6. **Connect the portal.** Edit `assets/cms-config.js` and fill in the project URL
    and the **anon / publishable** key (Project Settings > API). Never the
    `service_role` key.
 7. Commit and push. The site deploys, and `/admin/` is live.
@@ -70,12 +70,24 @@ many people, as Supabase's built-in sender is rate limited.
 
 The project **Siyanda Resources** (`yvmivogkfjgvwmsssnfd`) has the schema
 (both migrations), the storage buckets and the `admin-users` function
-deployed, and `admin/config.js` points at it. Still to do by hand (steps 2, 3
+deployed, and `assets/cms-config.js` points at it. Still to do by hand (steps 2, 3
 and 4 above): turn off public sign-ups, set the Site URL / redirect URL, and
 create the first super admin.
 
+## Public pages
+
+- **Careers** (`careers.html`) lists open vacancies from the portal under
+  "Current Vacancies". The CV-registration text below it is unchanged.
+- **Tenders** (`tenders.html`, new, linked in the menu) lists open tenders with
+  their closing date, briefing session, contact and downloadable documents
+  (current version only, via 5-minute signed links).
+- Both read through `assets/cms-public.js`, using the public key in
+  `assets/cms-config.js`. Visitors only ever receive items that are published
+  and not expired; the database enforces that, not the page.
+- Because the lists are loaded after the page opens, search engines that do not
+  run JavaScript will not index individual vacancies or tenders.
+
 ## Not done yet
 
-- The public Careers / Tenders / News / Documents pages still show the old
-  static content. Switching them to read from Supabase is the next step.
+- News (articles) and the general Documents library still use static content.
 - Email reminders before an item expires.

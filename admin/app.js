@@ -146,7 +146,7 @@
     if (!cfg.SUPABASE_URL || !cfg.SUPABASE_KEY) {
       return mount(h('div', { class: 'a-login' }, h('div', { class: 'a-card' },
         h('h1', null, 'Portal not connected yet'),
-        h('p', { class: 'a-sub' }, 'Add the Supabase project URL and public key to admin/config.js to switch the portal on. See supabase/README.md.'))));
+        h('p', { class: 'a-sub' }, 'Add the Supabase project URL and public key to assets/cms-config.js to switch the portal on. See supabase/README.md.'))));
     }
     if (!window.supabase) {
       return mount(h('div', { class: 'a-login' }, h('div', { class: 'a-card a-note err' }, 'Could not load the Supabase library. Check your connection and refresh.')));
