@@ -1,5 +1,6 @@
 /* Public pages fed by the content portal (Supabase).
  * careers.html -> #vacancies      tenders.html -> #tenders
+ * news.html -> #news               article.html -> #article
  * Visitors only ever receive items that are published and not expired: the
  * database's row level security decides that, this file just displays them.
  * Everything is built with textContent / DOM nodes (never innerHTML), so
@@ -129,8 +130,72 @@
     mount.appendChild(h('div', { class: 'listing-grid one' }, tenders.map(function (t) { return tenderCard(c, t, byTender[t.id] || []); })));
   }
 
+
+  /* ---------------------------------------------------------- news */
+  var PAGE = 9;
+  var isUuid = function (x) { return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(x || ''); };
+  var isHttps = function (u) { return /^https:\/\//i.test(u || ''); };
+  var articleDate = function (a) { return a.published_at || a.created_at; };
+
+  function newsCard(a) {
+    var internal = !!(a.body && a.body.trim());
+    var href = internal ? 'article.html?id=' + encodeURIComponent(a.id) : (isHttp(a.source_url) ? a.source_url : null);
+    var link = href ? h('a', { class: 'btn ghost small', href: href, target: internal ? null : '_blank', rel: internal ? null : 'noopener' }, 'Read More') : null;
+    return h('article', { class: 'news-card' },
+      isHttps(a.image_url) ? h('img', { class: 'news-thumb', src: a.image_url, alt: '', loading: 'lazy' }) : null,
+      h('div', { class: 'body' }, h('h3', null, a.title),
+        h('time', { datetime: articleDate(a) }, fmtDate(articleDate(a))),
+        a.summary ? h('p', null, a.summary) : null, link));
+  }
+
+  async function renderNews(mount) {
+    var c = db();
+    var fail = 'We could not load the latest news. Please try again later.';
+    if (!c) return note(mount, fail);
+    var r = await c.from('articles').select('*').order('published_at', { ascending: false, nullsFirst: false }).limit(60);
+    if (r.error) return note(mount, fail);
+    var rows = (r.data || []).filter(stillOpen);
+    rows.sort(function (x, y) { return new Date(articleDate(y)) - new Date(articleDate(x)); });
+    if (!rows.length) return note(mount, 'There is no news to show right now. Please check back soon.');
+    var shown = 0, grid = h('div', { class: 'grid g3 news-grid' }), more = h('p', { class: 'listing-actions center-actions' });
+    function draw() {
+      rows.slice(shown, shown + PAGE).forEach(function (a) { grid.appendChild(newsCard(a)); });
+      shown = Math.min(rows.length, shown + PAGE);
+      clear(more);
+      if (shown < rows.length) more.appendChild(h('button', { class: 'btn ghost', type: 'button', onclick: draw }, 'Show more news'));
+    }
+    clear(mount); mount.appendChild(grid); mount.appendChild(more); draw();
+  }
+
+  async function renderArticle(mount) {
+    var c = db();
+    var back = h('p', null, h('a', { class: 'a-back', href: 'news.html' }, '\u2190 All news'));
+    var missing = function (msg) { clear(mount); mount.appendChild(back); mount.appendChild(h('p', { class: 'listing-note' }, msg)); };
+    var id = new URLSearchParams(location.search).get('id');
+    if (!isUuid(id)) return missing('We could not find that article.');
+    if (!c) return missing('We could not load this article. Please try again later.');
+    var r = await c.from('articles').select('*').eq('id', id).maybeSingle();
+    if (r.error) return missing('We could not load this article. Please try again later.');
+    var a = r.data;
+    if (!a || !stillOpen(a)) return missing('This article is no longer available.');
+    document.title = a.title + ' | Siyanda Resources';
+    var paras = (a.body || '').split(/\n{2,}/).map(function (x) { return x.trim(); }).filter(Boolean);
+    clear(mount);
+    mount.appendChild(back);
+    mount.appendChild(h('article', { class: 'article' },
+      h('h1', null, a.title),
+      h('p', { class: 'meta' }, h('time', { datetime: articleDate(a) }, fmtDate(articleDate(a)))),
+      isHttps(a.image_url) ? h('img', { class: 'article-img', src: a.image_url, alt: '' }) : null,
+      a.summary ? h('p', { class: 'lead' }, a.summary) : null,
+      paras.map(function (x) { return h('p', { class: 'pre' }, x); }),
+      isHttp(a.source_url) ? h('p', { class: 'listing-actions' }, h('a', { class: 'btn ghost small', href: a.source_url, target: '_blank', rel: 'noopener' }, 'Read the original article')) : null));
+  }
+
   /* ---------------------------------------------------------- boot */
   var v = document.getElementById('vacancies'), t = document.getElementById('tenders');
   if (v) renderVacancies(v).catch(function () { note(v, 'We could not load the current vacancies. Please try again later.'); });
   if (t) renderTenders(t).catch(function () { note(t, 'We could not load the current tenders. Please try again later.'); });
+  var n = document.getElementById('news'), ar = document.getElementById('article');
+  if (n) renderNews(n).catch(function () { note(n, 'We could not load the latest news. Please try again later.'); });
+  if (ar) renderArticle(ar).catch(function () { note(ar, 'We could not load this article. Please try again later.'); });
 })();

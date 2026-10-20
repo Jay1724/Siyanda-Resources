@@ -87,7 +87,16 @@ create the first super admin.
 - Because the lists are loaded after the page opens, search engines that do not
   run JavaScript will not index individual vacancies or tenders.
 
+- **News** (`news.html`) lists published articles, newest first, 9 at a time
+  with "Show more news". An article with text opens its own page
+  (`article.html?id=…`); one with only a link opens that link in a new tab. The
+  five original articles were moved into the portal (their "Read more" links
+  still point at the old Wix site until you add article text or new links).
+  The two video cards at the bottom of the page are still static.
+
 ## Not done yet
 
-- News (articles) and the general Documents library still use static content.
+- The general Documents library (non-tender documents) has no public page yet.
+- Article photos for the five migrated articles, and the Nyandeni / Implats
+  videos on the News page.
 - Email reminders before an item expires.
