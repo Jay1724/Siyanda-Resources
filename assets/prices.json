@@ -1,28 +1,28 @@
 {
-  "updated": "2026-10-21T17:02:56Z",
+  "updated": "2026-10-21T21:31:50Z",
   "currency": "USD",
   "unit": "toz",
-  "usd_zar": 16.3529,
+  "usd_zar": 16.3898,
   "items": [
     {
       "name": "Gold",
-      "price": 4130.47,
-      "change_pct": 0.13
+      "price": 4141.07,
+      "change_pct": 0.39
     },
     {
       "name": "Silver",
-      "price": 57.54,
-      "change_pct": -0.8
+      "price": 57.97,
+      "change_pct": -0.04
     },
     {
       "name": "Platinum",
-      "price": 1630,
-      "change_pct": -1.76
+      "price": 1630.7,
+      "change_pct": -1.72
     },
     {
       "name": "Palladium",
-      "price": 1090.99,
-      "change_pct": -0.85
+      "price": 1089.34,
+      "change_pct": -1.0
     }
   ],
   "baseline": {
