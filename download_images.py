@@ -4,7 +4,11 @@ Run once from this folder:   python3 download_images.py
 Safe to re-run: files already downloaded are skipped."""
 import os, sys, time, urllib.request
 
+# Not on Wix; if one of these fails the site still builds (the page keeps a fallback image).
+OPTIONAL = {"team-crane.jpg"}
+
 IMAGES = {
+  "team-crane.jpg": "https://photos.smugmug.com/IR-Report-2021/i-HqQ8gXv/0/KkrcRKxpRKf7pZrDqR5jL5zgQVQqnkdZ73fFqKCTz/X4/DSC_2064_MortimerConcentratorBridgebysecuritygate_Spudvent_Chromerceoveryplantproduct%3Acamels-X4.jpg",
   "0fbd96_786b5c1bdcef483da71db012215fb19a_mv2.jpg": "https://static.wixstatic.com/media/0fbd96_786b5c1bdcef483da71db012215fb19a~mv2.jpg",
   "11062b_1c1dad37976a477086dea4fefabe1e09_mv2.jpg": "https://static.wixstatic.com/media/11062b_1c1dad37976a477086dea4fefabe1e09~mv2.jpg",
   "4ebd86b408624341912c9560e5c4cc87.jpg": "https://static.wixstatic.com/media/4ebd86b408624341912c9560e5c4cc87.jpg",
@@ -94,6 +98,6 @@ for name, url in IMAGES.items():
         print("  FAIL", name, e)
     time.sleep(0.15)
 print("\nDownloaded %d, already present %d, failed %d (of %d)" % (ok, skipped, len(failed), len(IMAGES)))
-if failed:
+if any(n not in OPTIONAL for n, _ in failed):
     print("Re-run to retry the failed ones.")
     sys.exit(1)
