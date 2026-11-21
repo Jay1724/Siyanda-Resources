@@ -742,3 +742,12 @@ html.cd-open { overflow: hidden; }
 .article .pre { line-height: 1.8; }
 .article-docs.listing { margin-top: 2.4vw; }
 @media (max-width: 760px) { .page-hero.short { min-height: 220px; } .page-hero.short .wrap > p:only-child { margin-left: 0; } }
+
+/* Values: all five cards in one row on desktop and tablet; wrap only on small screens */
+@media (min-width: 900px) {
+  .grid.g5:has(.value) { flex-wrap: nowrap; justify-content: stretch; gap: 1.2vw; }
+  .grid.g5 .value { flex: 1 1 0; min-width: 0; padding: 28px clamp(10px, 1.1vw, 22px) 30px; }
+  .grid.g5 .value img { width: min(110px, 80%); }
+  .grid.g5 .value h3 { font-size: clamp(.95rem, 1.15vw, 1.15rem); overflow-wrap: anywhere; }
+  .grid.g5 .value p { font-size: clamp(.8rem, .85vw, .95rem); }
+}
