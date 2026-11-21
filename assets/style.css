@@ -751,3 +751,15 @@ html.cd-open { overflow: hidden; }
   .grid.g5 .value h3 { font-size: clamp(.95rem, 1.15vw, 1.15rem); overflow-wrap: anywhere; }
   .grid.g5 .value p { font-size: clamp(.8rem, .85vw, .95rem); }
 }
+
+/* Operations: Read More opens the same pop-up as the About cards */
+.ops-grid .op[data-card] { cursor: pointer; }
+.ops-grid .op[data-card]:focus-visible { outline: 3px solid var(--wix-yellow); outline-offset: 6px; }
+.ops-grid .op .body { display: flex; flex-direction: column; align-items: flex-start; }
+.ops-grid .op .btn { margin-top: 1.1em; font-size: clamp(14px, .95vw, 18px); padding: .75vw 2.2vw; pointer-events: none; }
+.ops-grid .op[data-card]:hover .btn { background: #e6bb0f; border-color: #e6bb0f; }
+.ops-grid .op img { transition: transform .5s ease; }
+.ops-grid .op { overflow: visible; }
+.ops-grid .op[data-card] .body { position: relative; }
+@media (max-width: 800px) { .ops-grid .op .btn { padding: 12px 28px; } }
+.ops-grid .op .body p { margin: 0; }
