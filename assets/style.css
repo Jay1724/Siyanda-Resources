@@ -449,3 +449,66 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 .page-hero h1 { max-width: 62%; }
 .page-hero p { flex: 0 0 28vw; font-size: clamp(14px, .83vw, 16px); line-height: 1.5; color: #fff; font-weight: 500; }
 @media (max-width: 760px) { .page-hero .wrap { flex-direction: column; align-items: flex-start; gap: 18px; } .page-hero h1 { max-width: none; } .page-hero p { flex: none; } }
+
+/* ===== Wix match, stage 2: cards and page sections ===== */
+.section.alt { background: #fff; }
+:root[data-theme="dark"] .section.alt { background: var(--paper-alt); }
+.btn.outline { background: transparent; color: #000; border: 1px solid #000; border-radius: 0; padding: 8px 26px; font-size: .9rem; }
+.btn.outline:hover { background: #000; color: #fff; }
+:root[data-theme="dark"] .btn.outline { color: #fff; border-color: #fff; }
+:root[data-theme="dark"] .btn.outline:hover { background: #fff; color: #000; }
+
+/* About: image cards with the copy and a yellow button laid over the photo */
+.pillars .wrap { width: 94%; max-width: none; }
+.pillars .grid { gap: 1.2vw; }
+.pillar { position: relative; overflow: hidden; aspect-ratio: 586 / 740; color: #fff; display: flex; align-items: flex-end; justify-content: center; }
+.pillar img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+.pillar::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.62)); }
+.pillar .body { position: relative; z-index: 1; padding: 0 8% 7%; text-align: center; }
+.pillar h3 { color: #fff; font-size: clamp(22px, 1.9vw, 36px); letter-spacing: 0; text-transform: none; font-weight: 600; margin-bottom: .5em; }
+.pillar p { color: #fff; font-size: clamp(13px, .8vw, 15px); font-weight: 400; margin: 0 0 1.6em; }
+
+/* Values: four across, the fifth centred underneath */
+.grid.g5:has(.value) { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.2vw; }
+.grid.g5 .value { flex: 0 0 calc(25% - 1vw); min-width: 220px; }
+
+/* People: rounded photos, centred names, last row centred */
+.grid.g4:has(.person) { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.1vw; }
+.grid.g4 .person { flex: 0 0 calc(25% - .85vw); min-width: 220px; text-align: center; }
+.person .ph { border-radius: 22px; }
+.person h3 { font-size: clamp(17px, 1.05vw, 20px); font-weight: 700; margin: 18px 0 4px; }
+.person .role { font-size: clamp(13px, .73vw, 14px); }
+.section:has(.person) > .wrap { width: 94%; max-width: none; }
+
+/* Operations: two columns, panoramic images, bold titles */
+.ops-grid .op h3 { font-size: 1.1rem; font-weight: 700; }
+.ops-grid .op p { font-size: 1rem; }
+.section:has(.ops-grid) > .wrap { width: 94%; max-width: none; }
+
+/* Investments: white cards with a soft shadow, centred copy and a yellow button */
+.invest-grid .invest { border: 0; box-shadow: 0 2px 14px rgba(0,0,0,.14); text-align: center; align-items: center; }
+.invest-grid .invest h3 { font-weight: 700; }
+.invest-grid .invest .lg { border: 0; background: transparent; }
+.invest-grid .invest .btn { align-self: center; background: var(--wix-yellow); color: #000; border-color: var(--wix-yellow); padding: 10px 28px; }
+.invest-grid .invest .btn:hover { background: #e6bb0f; border-color: #e6bb0f; }
+.partner-grid .lg { border: 0; background: transparent; aspect-ratio: 2 / 1; }
+
+/* News: white cards with a soft shadow and a square outlined button */
+.news-card { border: 0; box-shadow: 0 2px 14px rgba(0,0,0,.12); }
+.news-card h3 { font-weight: 700; }
+
+/* Dark panels */
+.panel h2 { font-size: clamp(30px, 3.125vw, 60px); }
+
+/* Dark panels: 44vw wide, 90% black, roomy (measured from the live site at 1882px) */
+.panel-sec { min-height: max(620px, 44vw); }
+.panel-sec > .wrap { width: 88%; max-width: none; }
+.panel { max-width: none; width: 44vw; min-height: 34vw; padding: clamp(28px, 3vw, 58px) 6vw 3vw; }
+.panel.wide { width: 100%; min-height: 42vw; }
+.panel h2 { font-size: clamp(30px, 3.4vw, 64px); margin-bottom: .5em; }
+.panel p, .panel li, .panel .lead { font-size: clamp(14px, .83vw, 16px); line-height: 2; font-weight: 400; color: #fff; margin: 0 0 1em; }
+.panel .btn { font-size: 1rem; margin-top: .6em; }
+.panel .ticks li { padding-left: 1.2em; }
+@media (max-width: 960px) { .panel { width: 100%; min-height: 0; padding: 28px 24px; } .panel.wide { min-height: 0; } .panel-sec { min-height: 0; } }
+.section:has(.value) > .wrap { width: 88%; max-width: none; }
+.panel .ticks li { margin: 0; line-height: 1.9; }
