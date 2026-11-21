@@ -141,7 +141,7 @@
   function newsCard(a, hasDocs) {
     var internal = !!(a.body && a.body.trim()) || !!hasDocs;
     var href = internal ? 'article.html?id=' + encodeURIComponent(a.id) : (isHttp(a.source_url) ? a.source_url : null);
-    var link = href ? h('a', { class: 'btn ghost small', href: href, target: internal ? null : '_blank', rel: internal ? null : 'noopener' }, 'Read More') : null;
+    var link = href ? h('a', { class: 'btn outline small', href: href, target: internal ? null : '_blank', rel: internal ? null : 'noopener' }, 'Read More') : null;
     return h('article', { class: 'news-card' },
       isHttps(a.image_url) ? h('img', { class: 'news-thumb', src: a.image_url, alt: '', loading: 'lazy' }) : null,
       h('div', { class: 'body' }, h('h3', null, a.title),
