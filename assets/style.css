@@ -703,7 +703,7 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 .pillar::after { background: linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 45%, rgba(0,0,0,.35) 100%); }
 .pillar .body { text-align: left; padding: 7% 8% 0; }
 .pillar h3 { font-size: clamp(24px, 2.2vw, 42px); margin-bottom: .35em; }
-.pillar p { max-width: 24ch; font-size: clamp(14px, .9vw, 17px); margin: 0; }
+.pillar p { max-width: none; font-size: clamp(14px, .9vw, 17px); margin: 0; }
 .pillar .plus { position: absolute; z-index: 2; right: 6%; bottom: 5%; width: clamp(40px, 2.8vw, 54px); aspect-ratio: 1; border-radius: 50%; background: rgba(30,30,30,.78); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: transform .35s cubic-bezier(.2,.8,.2,1), background .25s; }
 .pillar .plus::before, .pillar .plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 38%; height: 2px; background: #fff; border-radius: 2px; transform: translate(-50%,-50%); }
 .pillar .plus::after { transform: translate(-50%,-50%) rotate(90deg); }
