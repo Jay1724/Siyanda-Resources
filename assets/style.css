@@ -618,3 +618,22 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 }
 @media (max-width: 560px) { .invest-grid .invest { width: 100%; } }
 .invest-grid .invest > div:last-child { display: flex; flex-direction: column; align-items: center; flex: 1; width: 100%; }
+
+/* ===== Wix match: Social Investment ===== */
+.video-slide { background: #fff; padding: 7.2vw 0 6vw; }
+.video-slide .wrap { width: 59%; max-width: none; }
+.yt { border-radius: 0; box-shadow: none; }
+.yt-alt a { color: var(--muted); }
+:root[data-theme="dark"] .video-slide { background: var(--paper); }
+
+.btn.round { border-radius: 18px; padding: 15px 40px; font-size: 1.05rem; }
+.split.top:has(.facts) { width: 89.7%; max-width: none; margin-left: 4.3vw; margin-right: auto; grid-template-columns: 796fr 730fr; gap: 10.3vw; align-items: start; }
+.split.top:has(.facts) > div:first-child img { width: 100%; height: auto; max-height: none; aspect-ratio: 796 / 276; object-fit: cover; border-radius: 26px; display: block; }
+.split.top:has(.facts) h2 { font-size: clamp(32px, 3.33vw, 64px); line-height: 1.15; margin: .12em 0 .3em; }
+.split.top:has(.facts) p { font-size: clamp(13px, .76vw, 14.5px); line-height: 1.7; margin: 0 0 1.5em; }
+.facts { padding-top: 1.8vw; }
+.facts .fact, .facts .fact:first-child { border-top: 1px solid #000; padding: 1.1vw 0 1.4vw; }
+.facts h3 { font-size: clamp(17px, 1.15vw, 22px); font-weight: 600; margin: 0 0 .5em; }
+.facts p { font-size: clamp(13px, .76vw, 14.5px); line-height: 1.65; margin: 0; color: var(--ink); }
+:root[data-theme="dark"] .facts .fact { border-color: #fff; }
+@media (max-width: 860px) { .split.top:has(.facts) { width: auto; margin-inline: 20px; grid-template-columns: 1fr; gap: 28px; } .facts { padding-top: 0; } .fact { padding: 16px 0; } }
