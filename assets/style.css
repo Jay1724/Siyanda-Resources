@@ -641,3 +641,24 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 /* ===== Wix match: Careers ===== */
 .panel .btn { font-size: clamp(15px, 1vw, 19px); padding: .95vw 2.1vw; }
 @media (max-width: 960px) { .panel .btn { padding: 14px 28px; } }
+
+/* ===== Wix match: News ===== */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.page-hero h1.sr-only + p { margin-left: auto; }
+.section:has(.news-grid) > .wrap { width: 94%; max-width: none; }
+.news-grid { gap: 1.7vw; }
+.news-thumb { aspect-ratio: 3 / 2; }
+.news-card .body { padding: 2.2vw 2.2vw 2.4vw; gap: 8px; }
+.news-card h3 { font-size: clamp(16px, .95vw, 18px); }
+.news-card time { font-size: clamp(11px, .65vw, 12px); letter-spacing: 0; text-transform: none; }
+.news-card p { font-size: clamp(13px, .76vw, 14.5px); line-height: 1.6; }
+.news-card .btn.outline { font-size: clamp(12px, .73vw, 14px); padding: .5vw 1.6vw; }
+
+.vposts { padding-top: 3vw; }
+.vposts .wrap { width: 77%; max-width: none; }
+.vgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6.8vw; align-items: start; }
+.vpost .yt { border-radius: 0; box-shadow: none; }
+.vpost h3 { font-size: clamp(18px, 1.15vw, 22px); font-weight: 700; margin: 1em 0 .5em; line-height: 1.3; }
+.vpost p { font-size: clamp(14px, .83vw, 16px); line-height: 1.6; margin: 0 0 1.2em; }
+.vpost .btn.outline { font-size: clamp(13px, .83vw, 15px); padding: .5vw 1.2vw; }
+@media (max-width: 860px) { .vposts .wrap { width: auto; margin-inline: 20px; } .vgrid { grid-template-columns: 1fr; gap: 40px; } .news-card .body { padding: 24px; } .news-grid { gap: 20px; } .vpost .btn.outline { padding: 8px 20px; } }

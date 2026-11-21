@@ -8,6 +8,7 @@ import os, sys, time, urllib.request
 OPTIONAL = {"team-crane.jpg"}
 
 IMAGES = {
+  "7e9495_e3f003908efe41e99926dddf011b2a49_mv2.jpg": "https://static.wixstatic.com/media/7e9495_e3f003908efe41e99926dddf011b2a49~mv2.jpg",
   "7e9495_fe4a4fc859e24ee9bcbc13ae15876a14_mv2.jpg": "https://static.wixstatic.com/media/7e9495_fe4a4fc859e24ee9bcbc13ae15876a14~mv2.jpg",
   "7e9495_203a923da46141f6a764fffa7693da01_mv2.jpg": "https://static.wixstatic.com/media/7e9495_203a923da46141f6a764fffa7693da01~mv2.jpg",
   "7e9495_0bbd0d17ad2149fd95501e5d0f75ac70_mv2.png": "https://static.wixstatic.com/media/7e9495_0bbd0d17ad2149fd95501e5d0f75ac70~mv2.png",

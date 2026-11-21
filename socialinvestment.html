@@ -81,19 +81,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="assets/motion.js"></script>
 <script src="assets/site.js"></script>
-<script>
-document.querySelectorAll('.yt').forEach(function (box) {
-  var a = box.querySelector('.yt-play');
-  a.addEventListener('click', function (e) {
-    e.preventDefault();
-    var f = document.createElement('iframe');
-    f.src = 'https://www.youtube.com/embed/' + box.dataset.yt + '?autoplay=1&rel=0';
-    f.title = 'Siyanda Resources corporate social investment video';
-    f.allow = 'autoplay; accelerometer; encrypted-media; picture-in-picture; fullscreen';
-    f.allowFullscreen = true;
-    box.replaceChildren(f);
-  });
-});
-</script>
 </body>
 </html>
