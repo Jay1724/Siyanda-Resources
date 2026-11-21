@@ -8,6 +8,9 @@ import os, sys, time, urllib.request
 OPTIONAL = {"team-crane.jpg"}
 
 IMAGES = {
+  "7e9495_fe4a4fc859e24ee9bcbc13ae15876a14_mv2.jpg": "https://static.wixstatic.com/media/7e9495_fe4a4fc859e24ee9bcbc13ae15876a14~mv2.jpg",
+  "7e9495_203a923da46141f6a764fffa7693da01_mv2.jpg": "https://static.wixstatic.com/media/7e9495_203a923da46141f6a764fffa7693da01~mv2.jpg",
+  "7e9495_0bbd0d17ad2149fd95501e5d0f75ac70_mv2.png": "https://static.wixstatic.com/media/7e9495_0bbd0d17ad2149fd95501e5d0f75ac70~mv2.png",
   "team-crane.jpg": "https://photos.smugmug.com/IR-Report-2021/i-HqQ8gXv/0/KkrcRKxpRKf7pZrDqR5jL5zgQVQqnkdZ73fFqKCTz/X4/DSC_2064_MortimerConcentratorBridgebysecuritygate_Spudvent_Chromerceoveryplantproduct%3Acamels-X4.jpg",
   "0fbd96_786b5c1bdcef483da71db012215fb19a_mv2.jpg": "https://static.wixstatic.com/media/0fbd96_786b5c1bdcef483da71db012215fb19a~mv2.jpg",
   "11062b_1c1dad37976a477086dea4fefabe1e09_mv2.jpg": "https://static.wixstatic.com/media/11062b_1c1dad37976a477086dea4fefabe1e09~mv2.jpg",

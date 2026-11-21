@@ -77,3 +77,37 @@
     M.start();
   }
 })();
+
+// Team: each person opens a pop-up with their photo, role and profile
+(function () {
+  var people = document.querySelectorAll('.person');
+  if (!people.length) return;
+  var dlg = document.createElement('dialog');
+  dlg.className = 'person-dialog';
+  dlg.setAttribute('aria-labelledby', 'pd-name');
+  dlg.innerHTML = '<button class="pd-close" type="button" aria-label="Close">&times;</button>' +
+    '<div class="pd-photo"></div><div class="pd-body"><h3 id="pd-name"></h3><p class="pd-role"></p><div class="pd-bio"></div></div>';
+  document.body.appendChild(dlg);
+  var photo = dlg.querySelector('.pd-photo'), name = dlg.querySelector('#pd-name'),
+      role = dlg.querySelector('.pd-role'), bio = dlg.querySelector('.pd-bio');
+  var opener = null;
+  function open(p) {
+    var img = p.querySelector('.ph img'), b = p.querySelector('.bio');
+    photo.innerHTML = '';
+    if (img) { var c = img.cloneNode(); c.removeAttribute('loading'); photo.appendChild(c); }
+    name.textContent = p.querySelector('h3').textContent;
+    role.textContent = p.querySelector('.role') ? p.querySelector('.role').textContent : '';
+    bio.innerHTML = b ? b.innerHTML : '';
+    opener = p;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    dlg.scrollTop = 0;
+  }
+  function close() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); if (opener) opener.focus(); }
+  people.forEach(function (p) {
+    p.tabIndex = 0; p.setAttribute('role', 'button'); p.setAttribute('aria-haspopup', 'dialog');
+    p.addEventListener('click', function () { open(p); });
+    p.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(p); } });
+  });
+  dlg.querySelector('.pd-close').addEventListener('click', close);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) close(); });
+})();
