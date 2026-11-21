@@ -590,3 +590,31 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 .pd-close { position: absolute; top: 12px; right: 14px; z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0,0,0,.7); color: #fff; font-size: 26px; line-height: 1; cursor: pointer; }
 .pd-close:hover { background: #000; }
 @media (max-width: 720px) { .person-dialog[open] { display: block; } .pd-photo img { min-height: 0; height: 300px; } }
+
+/* ===== Wix match: Operations page ===== */
+.ops-grid { column-gap: 2.1vw; row-gap: 2.6vw; align-items: start; }
+.ops-grid .op img, .ops-grid .op:nth-child(even) img { aspect-ratio: 884 / 150; border-radius: 18px; }
+.ops-grid .op .body { padding-top: 14px; }
+.ops-grid .op h3 { font-size: clamp(16px, .95vw, 18px); margin: 0 0 .5em; }
+.ops-grid .op p { font-size: clamp(15px, .95vw, 18px); line-height: 1.6; }
+
+.center:has(.invest-grid) .eyebrow { color: #000; letter-spacing: 0; font-size: clamp(12px, .73vw, 14px); font-weight: 700; margin-bottom: 4px; }
+.center:has(.invest-grid) .lead { font-size: clamp(12px, .73vw, 14px); }
+.section > .wrap.center:has(.invest-grid), .section > .wrap.center:has(.partner-grid) { width: 88%; max-width: none; }
+.invest-grid { width: 100%; gap: 1.04vw; margin-top: 3vw; align-items: stretch; }
+.invest-grid .invest { width: calc(25% - .8vw); min-width: 0; min-height: 36.9vw; padding: 3vw 1.8vw 2.2vw; gap: 0; }
+.invest-grid .invest .lg { height: 9vw; width: 100%; display: grid; place-items: center; padding: 0; }
+.invest-grid .invest .lg img { max-width: 72%; max-height: 100%; }
+.invest-grid .invest h3 { font-size: clamp(15px, 1.05vw, 20px); margin: 1.4vw 0 1.6vw; text-align: center; }
+.invest-grid .invest p { font-size: clamp(12px, .73vw, 14px); line-height: 1.6; text-align: center; margin: 0 0 1em; }
+.invest-grid .invest .btn { margin-top: auto; font-size: clamp(12px, .73vw, 14px); padding: .6vw 1.6vw; }
+.partner-grid { gap: 1.6vw 1.04vw; margin-top: 2vw; }
+.partner-grid .lg { aspect-ratio: auto; height: clamp(110px, 14.5vw, 280px); padding: 0; }
+.partner-grid .lg img { max-width: 78%; max-height: 78%; }
+@media (max-width: 900px) {
+  .invest-grid .invest { width: calc(50% - 10px); min-height: 0; padding: 28px 18px; }
+  .invest-grid .invest .lg { height: 90px; } .invest-grid .invest h3 { margin: 18px 0 12px; }
+  .invest-grid { gap: 20px; }
+}
+@media (max-width: 560px) { .invest-grid .invest { width: 100%; } }
+.invest-grid .invest > div:last-child { display: flex; flex-direction: column; align-items: center; flex: 1; width: 100%; }
