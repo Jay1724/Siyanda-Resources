@@ -47,6 +47,9 @@
     dots.forEach(function (d, n) {
       d.addEventListener('click', function () { clearInterval(timer); if (n !== i) show(n); start(); });
     });
+    document.querySelectorAll('.hero-arrow').forEach(function (b) {
+      b.addEventListener('click', function () { clearInterval(timer); show(i + (b.classList.contains('next') ? 1 : -1)); start(); });
+    });
     start();
   }
 
