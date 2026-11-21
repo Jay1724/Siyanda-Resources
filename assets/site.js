@@ -127,3 +127,48 @@ document.querySelectorAll('.yt').forEach(function (box) {
     box.replaceChildren(f);
   });
 });
+
+
+// About: Apple-style cards. The + opens the full story in a pop-up that grows out of the card.
+(function () {
+  var cards = document.querySelectorAll('[data-card]');
+  if (!cards.length) return;
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var dlg = document.createElement('dialog');
+  dlg.className = 'card-dialog';
+  dlg.innerHTML = '<button class="cd-close" type="button" aria-label="Close">&times;</button>' +
+    '<div class="cd-hero"><img alt=""><h2 id="cd-title"></h2></div><div class="cd-body"></div>';
+  dlg.setAttribute('aria-labelledby', 'cd-title');
+  document.body.appendChild(dlg);
+  var img = dlg.querySelector('.cd-hero img'), title = dlg.querySelector('#cd-title'), body = dlg.querySelector('.cd-body');
+  var opener = null;
+  function grow(from) {
+    if (calm || !dlg.animate) return;
+    var to = dlg.getBoundingClientRect();
+    var dx = from.left + from.width / 2 - (to.left + to.width / 2), dy = from.top + from.height / 2 - (to.top + to.height / 2);
+    dlg.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + (from.width / to.width) + ',' + (from.height / to.height) + ')', opacity: .6 },
+                 { transform: 'none', opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  }
+  function open(card) {
+    opener = card;
+    img.src = card.querySelector('img').getAttribute('src');
+    title.textContent = card.querySelector('h3').textContent;
+    body.innerHTML = card.querySelector('.pillar-more').innerHTML;
+    var from = card.getBoundingClientRect();
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    dlg.scrollTop = 0; grow(from);
+    document.documentElement.classList.add('cd-open');
+  }
+  function shut() {
+    document.documentElement.classList.remove('cd-open');
+    if (dlg.close) dlg.close(); else dlg.removeAttribute('open');
+    if (opener) opener.focus();
+  }
+  cards.forEach(function (c) {
+    c.addEventListener('click', function () { open(c); });
+    c.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(c); } });
+  });
+  dlg.querySelector('.cd-close').addEventListener('click', shut);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) shut(); });
+  dlg.addEventListener('close', function () { document.documentElement.classList.remove('cd-open'); });
+})();
