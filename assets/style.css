@@ -512,3 +512,10 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 @media (max-width: 960px) { .panel { width: 100%; min-height: 0; padding: 28px 24px; } .panel.wide { min-height: 0; } .panel-sec { min-height: 0; } }
 .section:has(.value) > .wrap { width: 88%; max-width: none; }
 .panel .ticks li { margin: 0; line-height: 1.9; }
+
+/* Our Team panel: one column, plain bullets, larger copy (matches the live slide) */
+.panel.wide { padding-inline: 4vw 14vw; }
+.panel.wide p, .panel.wide li, .panel.wide .lead { font-size: clamp(15px, 1.04vw, 20px); line-height: 1.6; }
+.panel.wide p { margin: 0 0 1.4em; }
+.panel.wide .bullets { list-style: disc; margin: 0; padding-left: 1.8em; }
+.panel.wide .bullets li { margin: 0; padding: 0; }
