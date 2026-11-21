@@ -111,3 +111,19 @@
   dlg.querySelector('.pd-close').addEventListener('click', close);
   dlg.addEventListener('click', function (e) { if (e.target === dlg) close(); });
 })();
+
+
+// YouTube posters: click to load the player (Social Investment, News)
+document.querySelectorAll('.yt').forEach(function (box) {
+  var a = box.querySelector('.yt-play');
+  if (!a) return;
+  a.addEventListener('click', function (e) {
+    e.preventDefault();
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube.com/embed/' + box.dataset.yt + '?autoplay=1&rel=0';
+    f.title = box.dataset.title || 'Siyanda Resources video';
+    f.allow = 'autoplay; accelerometer; encrypted-media; picture-in-picture; fullscreen';
+    f.allowFullscreen = true;
+    box.replaceChildren(f);
+  });
+});
