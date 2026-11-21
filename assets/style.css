@@ -519,3 +519,22 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 .panel.wide p { margin: 0 0 1.4em; }
 .panel.wide .bullets { list-style: disc; margin: 0; padding-left: 1.8em; }
 .panel.wide .bullets li { margin: 0; padding: 0; }
+
+/* Team pop-up */
+.person { cursor: pointer; }
+.person:focus-visible { outline: 3px solid var(--wix-yellow); outline-offset: 6px; }
+.person .ph img { transition: transform .4s ease; }
+.person:hover .ph img { transform: scale(1.04); }
+.bio { display: none; }
+.person-dialog { border: 0; padding: 0; width: min(920px, calc(100% - 32px)); max-height: calc(100vh - 48px); overflow: auto; border-radius: 22px; background: var(--paper); color: var(--ink); }
+.person-dialog[open] { display: grid; grid-template-columns: 5fr 7fr; }
+.person-dialog::backdrop { background: rgba(0,0,0,.65); }
+.pd-photo img { width: 100%; height: 100%; min-height: 320px; object-fit: cover; object-position: center top; display: block; }
+.pd-body { padding: clamp(24px, 3.4vw, 48px); }
+.pd-body h3 { font-size: clamp(24px, 2.2vw, 36px); font-weight: 700; margin: 0 0 .15em; }
+.pd-role { color: var(--muted); margin: 0 0 1.2em; font-weight: 500; }
+.pd-bio ul { margin: 0; padding-left: 1.2em; }
+.pd-bio li { margin-bottom: .55em; line-height: 1.55; }
+.pd-close { position: absolute; top: 12px; right: 14px; z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0,0,0,.7); color: #fff; font-size: 26px; line-height: 1; cursor: pointer; }
+.pd-close:hover { background: #000; }
+@media (max-width: 720px) { .person-dialog[open] { display: block; } .pd-photo img { min-height: 0; height: 300px; } }
