@@ -24,6 +24,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Download site images from the original Wix host
         run: python3 download_images.py
+      - name: Shrink oversized photos
+        # Photos fetched at deploy time arrive as camera originals; cap them at 2400px.
+        run: |
+          pip install --quiet pillow
+          python3 scripts/optimise_images.py
       - name: Assemble site
         run: |
           mkdir _site
