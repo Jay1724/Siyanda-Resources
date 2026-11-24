@@ -768,3 +768,9 @@ html.cd-open { overflow: hidden; }
 .ops-grid .op[data-card] .body { position: relative; }
 @media (max-width: 800px) { .ops-grid .op .btn { padding: 12px 28px; } }
 .ops-grid .op .body p { margin: 0; }
+
+/* Heroes fill the whole screen (under the see-through header), with nothing of the next section showing.
+   svh = the screen height with the phone's browser bars showing, so nothing peeks on phones either. */
+.hero { height: 100vh; height: 100svh; min-height: 480px; }
+.page-hero:not(.short) { min-height: 100vh; min-height: 100svh; }
+.site-header + main > .hero:first-child, .site-header + main > .page-hero:first-child { margin-top: calc(-1 * var(--header-h) - 1px); }
