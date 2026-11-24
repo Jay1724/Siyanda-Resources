@@ -39,7 +39,7 @@ p { margin: 0 0 1.1em; }
 .lead { font-size: 1.2rem; color: var(--ink-soft); }
 
 /* ===== Header ===== */
-.site-header { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,.7); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-bottom: 1px solid rgba(255,255,255,.12); }
+.site-header { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,.7); border-bottom: 1px solid rgba(255,255,255,.12); }
 .site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); }
 /* hero slides up under the translucent header */
 .site-header + main > .hero:first-child, .site-header + main > .page-hero:first-child { margin-top: calc(-1 * var(--header-h)); }
@@ -53,7 +53,7 @@ p { margin: 0 0 1.1em; }
 
 @media (max-width: 1020px) {
   .menu-btn { display: block; }
-  .nav { position: absolute; inset: var(--header-h) 0 auto 0; background: rgba(0,0,0,.7); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.12); display: none; }
+  .nav { position: absolute; inset: var(--header-h) 0 auto 0; background: rgba(0,0,0,.7); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.12); display: none; }
   .nav.open { display: flex; }
   .nav a { padding: 14px 4px; border-bottom: 1px solid rgba(255,255,255,.12); }
   .nav a[aria-current="page"] { border-bottom-color: var(--accent); }
@@ -370,7 +370,12 @@ blockquote { margin: 0 0 1em; padding-left: 20px; border-left: 3px solid var(--a
 /* ===== Panel sections: photo background, black 90% panel, parallax reveal ===== */
 .panel-sec { position: relative; display: flex; align-items: center; min-height: 620px; padding: clamp(40px, 7vw, 96px) 0; background-color: var(--dark); background-position: center; background-size: cover; background-repeat: no-repeat; color: #fff; }
 .panel-sec > .wrap { width: 100%; }
-@media (min-width: 1024px) and (hover: hover) and (prefers-reduced-motion: no-preference) { .panel-sec { background-attachment: fixed; } }
+/* Parallax: the photo sits in its own layer, pinned to the viewport and clipped to the section.
+   Scrolling then only moves the clip on the GPU; nothing is repainted (unlike background-attachment: fixed). */
+.panel-sec { clip-path: inset(0); }
+.panel-bg { position: absolute; inset: 0; z-index: 0; background-color: var(--dark); background-size: cover; background-position: center; background-repeat: no-repeat; pointer-events: none; }
+.panel-sec > .wrap { position: relative; z-index: 1; }
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) { .panel-bg { position: fixed; will-change: transform; } }
 .panel { position: relative; max-width: 580px; padding: clamp(28px, 4vw, 56px); background: rgba(0,0,0,.9); border-radius: 22px; color: #e9e6df; }
 .panel::before { content: ""; display: block; width: 60px; height: 6px; margin-bottom: 22px; background: var(--highlight); }
 .panel h2 { color: #fff; }
@@ -704,7 +709,7 @@ h2 { font-size: clamp(30px, 3.125vw, 60px); font-weight: 600; }
 .pillar .body { text-align: left; padding: 7% 8% 0; }
 .pillar h3 { font-size: clamp(24px, 2.2vw, 42px); margin-bottom: .35em; }
 .pillar p { max-width: none; font-size: clamp(14px, .9vw, 17px); margin: 0; }
-.pillar .plus { position: absolute; z-index: 2; right: 6%; bottom: 5%; width: clamp(40px, 2.8vw, 54px); aspect-ratio: 1; border-radius: 50%; background: rgba(30,30,30,.78); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: transform .35s cubic-bezier(.2,.8,.2,1), background .25s; }
+.pillar .plus { position: absolute; z-index: 2; right: 6%; bottom: 5%; width: clamp(40px, 2.8vw, 54px); aspect-ratio: 1; border-radius: 50%; background: rgba(30,30,30,.78); transition: transform .35s cubic-bezier(.2,.8,.2,1), background .25s; }
 .pillar .plus::before, .pillar .plus::after { content: ""; position: absolute; left: 50%; top: 50%; width: 38%; height: 2px; background: #fff; border-radius: 2px; transform: translate(-50%,-50%); }
 .pillar .plus::after { transform: translate(-50%,-50%) rotate(90deg); }
 .pillar:hover .plus { transform: rotate(90deg); background: var(--wix-yellow); }
