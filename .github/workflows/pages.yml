@@ -10,16 +10,17 @@ permissions:
   pages: write
   id-token: write
 
+# Let a deploy that has started finish; a newer push queues behind it.
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
+# Build and deploy run as separate jobs (GitHub's standard Pages layout). In one job the
+# deploy step sometimes looked for the site bundle before GitHub had registered the
+# upload ("No artifacts named github-pages were found") and the deploy failed.
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - name: Download site images from the original Wix host
@@ -43,5 +44,13 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
